@@ -4,7 +4,7 @@ import and from './and.js'
 import or from './or.js'
 import nor from './nor.js'
 import xor from './xor.js'
-
+import mux from './mux.js'
 console.log('not 1:', not(1))
 console.log('not 0:', not(0))
 console.log('and 0,0:', and(0, 0))
@@ -23,3 +23,7 @@ console.log('xor 0,0:', xor(0, 0))
 console.log('xor 0,1:', xor(0, 1))
 console.log('xor 1,0:', xor(1, 0))
 console.log('xor 1,1:', xor(1, 1))
+
+console.log('mux 1,0,1 :ret 1', mux(1, 0, 1))
+console.log('mux 0,1,1 :ret 0', mux(0, 1, 1))
+console.log('mux 1,1,1 :ret 1', mux(1, 1, 1))
