@@ -11,6 +11,7 @@ import and16 from './and16.js'
 import or16 from './or16.js'
 import mux16 from './mux16.js'
 import or8Way from './or8Way.js'
+import mux4Way16 from './mux4Way16.js'
 
 console.log('not 1:', not(1))
 console.log('not 0:', not(0))
@@ -86,4 +87,15 @@ console.log(
 console.log(
 	'or8Way return 1 if at least 1 is 1 in: [0, 0, 0, 0, 0, 0, 0, 0] ret: 0',
 	or8Way([0, 0, 0, 0, 0, 0, 0, 0])
+)
+
+console.log(
+	'mux4Way16: if s = 1 ? a : b',
+	mux4Way16(
+		[1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+		[1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+		[1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+		[1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+		[0, 1]
+	)
 )
