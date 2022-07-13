@@ -10,6 +10,7 @@ import not16 from './not16.js'
 import and16 from './and16.js'
 import or16 from './or16.js'
 import mux16 from './mux16.js'
+import or8Way from './or8Way.js'
 
 console.log('not 1:', not(1))
 console.log('not 0:', not(0))
@@ -76,4 +77,13 @@ console.log(
 		[1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
 		1
 	)
+)
+
+console.log(
+	'or8Way return 1 if at least 1 is 1 in: [0, 1, 0, 0, 0, 0, 0, 0] ret: 1',
+	or8Way([0, 1, 0, 0, 0, 0, 0, 0])
+)
+console.log(
+	'or8Way return 1 if at least 1 is 1 in: [0, 0, 0, 0, 0, 0, 0, 0] ret: 0',
+	or8Way([0, 0, 0, 0, 0, 0, 0, 0])
 )
