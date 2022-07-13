@@ -9,6 +9,7 @@ import dmux from './dmux.js'
 import not16 from './not16.js'
 import and16 from './and16.js'
 import or16 from './or16.js'
+import mux16 from './mux16.js'
 
 console.log('not 1:', not(1))
 console.log('not 0:', not(0))
@@ -64,5 +65,15 @@ console.log(
 	or16(
 		[0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
 		[1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0]
+	)
+)
+
+console.log(
+	`mux16:\n [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+	    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0]\n`,
+	mux16(
+		[0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+		[1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+		1
 	)
 )
