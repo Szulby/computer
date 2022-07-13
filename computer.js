@@ -13,6 +13,7 @@ import mux16 from './mux16.js'
 import or8Way from './or8Way.js'
 import mux4Way16 from './mux4Way16.js'
 import mux8Way16 from './mux8Way16.js'
+import dmux4Way from './dmux4Way.js'
 
 console.log('not 1:', not(1))
 console.log('not 0:', not(0))
@@ -115,3 +116,5 @@ console.log(
 		[0, 1, 1]
 	)
 )
+
+console.log('dmux4Way: out [ 0, 0, 1, 0 ]', dmux4Way(1, [0, 1]))
