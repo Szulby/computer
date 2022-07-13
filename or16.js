@@ -1,12 +1,12 @@
-import and from './and.js'
-export default function and16(a, b) {
-	return a.map((a, id) => and(a, b[id]))
+import or from './or.js'
+export default function or16(a, b) {
+	return a.map((a, id) => or(a, b[id]))
 }
 
 // console.log(
-// 	`and16:\n [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+// 	`or16:\n [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
 //     [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0]\n`,
-// 	and16(
+// 	or16(
 // 		[0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
 // 		[1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0]
 // 	)
