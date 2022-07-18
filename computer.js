@@ -14,6 +14,8 @@ import or8Way from './or8Way.js'
 import mux4Way16 from './mux4Way16.js'
 import mux8Way16 from './mux8Way16.js'
 import dmux4Way from './dmux4Way.js'
+import dmux8Way from './dmux8Way.js'
+import halfAdder from './halfAdder.js'
 
 console.log('not 1:', not(1))
 console.log('not 0:', not(0))
@@ -118,3 +120,11 @@ console.log(
 )
 
 console.log('dmux4Way: out [ 0, 0, 1, 0 ]', dmux4Way(1, [0, 1]))
+
+console.log('dmux8Way out  [0, 0, 0, 1,0, 0, 0, 0] ,', dmux8Way(1, [1, 1, 0]))
+console.log('weak tests of dmux8way')
+
+console.log('half adder a=0 b=0 o=0 c=0 ', halfAdder(0, 0))
+console.log('half adder a=1 b=0 o=1 c=0 ', halfAdder(1, 0))
+console.log('half adder a=0 b=1 o=1 c=0 ', halfAdder(0, 1))
+console.log('half adder a=1 b=1 o=0 c=1 ', halfAdder(1, 1))
