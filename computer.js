@@ -16,7 +16,9 @@ import mux8Way16 from './mux8Way16.js'
 import dmux4Way from './dmux4Way.js'
 import dmux8Way from './dmux8Way.js'
 import halfAdder from './halfAdder.js'
+import fullAdder from './fullAdder.js'
 
+console.log = () => {}
 console.log('not 1:', not(1))
 console.log('not 0:', not(0))
 
@@ -128,3 +130,13 @@ console.log('half adder a=0 b=0 o=0 c=0 ', halfAdder(0, 0))
 console.log('half adder a=1 b=0 o=1 c=0 ', halfAdder(1, 0))
 console.log('half adder a=0 b=1 o=1 c=0 ', halfAdder(0, 1))
 console.log('half adder a=1 b=1 o=0 c=1 ', halfAdder(1, 1))
+
+console.log('full adder')
+console.log('a=0 b=0 c=0 s=0 c=0', fullAdder(0, 0, 0))
+console.log('a=0 b=1 c=1 s=1 c=0', fullAdder(0, 0, 1))
+console.log('a=0 b=1 c=0 s=1 c=0', fullAdder(0, 1, 0))
+console.log('a=0 b=1 c=1 s=0 c=1', fullAdder(0, 1, 1))
+console.log('a=1 b=0 c=0 s=1 c=0', fullAdder(1, 0, 0))
+console.log('a=1 b=0 c=1 s=0 c=1', fullAdder(1, 0, 1))
+console.log('a=1 b=1 c=0 s=0 c=1', fullAdder(1, 1, 0))
+console.log('a=1 b=1 c=1 s=1 c=1', fullAdder(1, 1, 1))
