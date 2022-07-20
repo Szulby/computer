@@ -4,7 +4,7 @@ import halfAdder from './halfAdder.js'
 export default function adder16bit(a, b) {
 	let c
 	let o = []
-	for (let i = 7; i >= 0; i--) {
+	for (let i = 15; i >= 0; i--) {
 		if (i === 7) {
 			;[o[i], c] = halfAdder(a[i], b[i])
 		} else {
