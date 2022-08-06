@@ -18,6 +18,7 @@ import dmux8Way from './dmux8Way.js'
 import halfAdder from './halfAdder.js'
 import fullAdder from './fullAdder.js'
 import adder16bit from './adder16bit.js'
+import inc16 from './inc16.js'
 // console.log = () => {}
 
 console.log('not a=1 o=0:', not(1))
@@ -150,3 +151,5 @@ console.log(
 		[0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1]
 	)
 )
+
+console.log('inc16', inc16([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]))
