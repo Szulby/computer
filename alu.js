@@ -1,6 +1,8 @@
 import adder16bit from './adder16bit.js'
 import not from './not.js'
 import or from './or.js'
+import and16 from './and16.js'
+
 export default function alu(x, y, f) {
 	// set x = 0
 	if (f[0]) {
@@ -27,16 +29,26 @@ export default function alu(x, y, f) {
 		})
 	}
 
-	// function
+	// if function add else and
 	let o
 	if (f[4]) {
 		o = adder16bit(x, y)
+	} else {
+		o = and16(x, y)
 	}
-	if (f) console.log(x, y, o)
+	// negative output
+	if (f[5]) {
+		o = o.map((el) => {
+			return not(el)
+		})
+	}
+	return o
 }
 
-alu(
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 1, 0, 0, 1, 0]
+console.log(
+	alu(
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 0, 0, 0, 1]
+	)
 )
