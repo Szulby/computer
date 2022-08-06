@@ -134,7 +134,7 @@ console.log('half adder a=1 b=1 o=0 c=1 ', halfAdder(1, 1))
 
 console.log('full adder')
 console.log('a=0 b=0 c=0 s=0 c=0', fullAdder(0, 0, 0))
-console.log('a=0 b=1 c=1 s=1 c=0', fullAdder(0, 0, 1))
+console.log('a=0 b=0 c=1 s=1 c=0', fullAdder(0, 0, 1))
 console.log('a=0 b=1 c=0 s=1 c=0', fullAdder(0, 1, 0))
 console.log('a=0 b=1 c=1 s=0 c=1', fullAdder(0, 1, 1))
 console.log('a=1 b=0 c=0 s=1 c=0', fullAdder(1, 0, 0))
