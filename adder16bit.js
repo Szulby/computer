@@ -5,7 +5,7 @@ export default function adder16bit(a, b) {
 	let c
 	let o = []
 	for (let i = 15; i >= 0; i--) {
-		if (i === 7) {
+		if (i === 15) {
 			;[o[i], c] = halfAdder(a[i], b[i])
 		} else {
 			;[o[i], c] = fullAdder(a[i], b[i], c)
