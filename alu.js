@@ -30,7 +30,7 @@ export default function alu(x, y, f) {
 	}
 
 	// if function add else and
-	let o
+	let o, zr, ng
 	if (f[4]) {
 		o = adder16bit(x, y)
 	} else {
@@ -42,13 +42,13 @@ export default function alu(x, y, f) {
 			return not(el)
 		})
 	}
-	return o
+	return { out: o, zr, ng }
 }
 
-console.log(
-	alu(
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-		[1, 1, 0, 0, 0, 1]
-	)
-)
+// console.log(
+// 	alu(
+// 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+// 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+// 		[1, 1, 0, 0, 0, 1]
+// 	)
+// )
