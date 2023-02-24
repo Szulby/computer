@@ -1,4 +1,4 @@
-import nand from './nand.js'
+import nand from "./nand.js";
 export default function mux(a, b, s) {
-	return nand(nand(a, s), nand(b, nand(s, s)))
+  return nand(nand(a, nand(s, s)), nand(b, s));
 }
