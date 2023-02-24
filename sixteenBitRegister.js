@@ -3,7 +3,7 @@ export default function sixteenBitRegister() {
 	const state = Array(16)
 		.fill(oneBitRegister)
 		.map((bit) => bit());
-	return function (input, load) {
+	return function (input = [], load) {
 		return state.map((dff, id) => dff(input[id], load));
 	};
 }
