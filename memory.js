@@ -1,6 +1,6 @@
 import sixteenBitRegister from "./sixteenBitRegister.js";
-export default function memory256() {
-  const state = Array(4)
+export default function memory(length) {
+  const state = Array(length)
     .fill(sixteenBitRegister)
     .map((sixteen) => sixteen());
   return (input = [], addr, load) => {
