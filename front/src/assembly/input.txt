@@ -5,7 +5,7 @@
 
 // Computes RAM[2] =
 // max(RAM[0],RAM[1])
-@dupa
+@R0
 D=M
 @R1
 D=D-M

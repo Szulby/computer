@@ -32,23 +32,15 @@ fs.readFile("./input.txt", "utf8", (er, data) => {
     console.log(er);
     return;
   }
-  data
+  const input = data
     .replaceAll("\r\n", "\n")
     .replaceAll("\r", "\n")
     .split("\n")
-    .filter((el) => el && !el.includes("//"))
-    .map((line, id) => {
-      if (line.match(/\((.*?)\)/)) {
-        let alias = line.replaceAll("(", "").replaceAll(")", "").toLowerCase();
-        if (!symbols.alias) {
-          symbols[alias] = id + 1;
-        }
-      }
-      return line;
-    })
-    .forEach((line) => {
-      parse(line);
-    });
+    .filter((el) => el && !el.includes("//"));
+
+  createAlias(input).forEach((line) => {
+    parse(line);
+  });
   console.log(parsed);
   save(parsed);
 });
@@ -59,10 +51,11 @@ function parse(line) {
       parsed.push((line.slice(1) >>> 0).toString(2).padStart(16, "0"));
     } else {
       const symbol = symbols[line.slice(1).toLowerCase()];
-      if (symbol) {
-        console.log(symbol >>> 0);
+      if (!isNaN(symbol)) {
+        parsed.push(symbol.toString(2).padStart(16, "0"));
       } else {
-        symbols[symbol] = symbolOffset;
+        symbols[line.slice(1).toLowerCase()] = symbolOffset;
+        parsed.push(symbolOffset.toString(2).padStart(16, "0"));
         symbolOffset++;
       }
     }
@@ -70,16 +63,20 @@ function parse(line) {
     let base = "111";
     const c = split(line);
     // controll instructions
+    if (c[1].toLowerCase() === "0") base += "0101010";
     if (c[1].toLowerCase() === "d") base += "0001100";
+    if (c[1].toLowerCase() === "m") base += "1110000";
     if (c[1].toLowerCase() === "d+1") base += "0011111";
     if (c[1].toLowerCase() === "a-1") base += "0110010";
+    if (c[1].toLowerCase() === "d-m") base += "1010011";
     // destination instructions
     if (!c[0]) base += "000";
     if (c[0].toLowerCase() === "m") base += "001";
     if (c[0].toLowerCase() === "d") base += "010";
     // if correct save
     if (!c[2]) base += "000";
-    if (c[2]?.toLowerCase() === "jmp") base += "111";
+    if (c[2].toLowerCase() === "jgt") base += "001";
+    if (c[2].toLowerCase() === "jmp") base += "111";
     if (base.length === 16) parsed.push(base);
     else {
       //   console.log(`incorrect parsed: ${line} to: ${base}`);
@@ -101,4 +98,17 @@ function split(line) {
   if (!line.includes("=")) tmp.unshift("");
   if (!line.includes(";")) tmp.push("");
   return tmp;
+}
+function createAlias(data) {
+  let index = data.findIndex((line) => {
+    return line.match(/\((.*?)\)/);
+  });
+
+  if (index !== -1) {
+    symbols[data[index].replaceAll("(", "").replaceAll(")", "").toLowerCase()] =
+      index;
+    return createAlias(data.filter((line) => line !== data[index]));
+  } else {
+    return data;
+  }
 }
