@@ -20,8 +20,8 @@ function App() {
       <button onClick={reset}>Reset</button>
       <canvas id="canvas" />
       <div style={{ width: 300 }}>
-        {screen.map((romEl) => (
-          <p key={romEl}>{romEl}</p>
+        {screen.map((romEl, id) => (
+          <p key={id}>{romEl}</p>
         ))}
       </div>
     </div>

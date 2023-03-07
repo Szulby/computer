@@ -24,7 +24,7 @@ const ram = memory(512);
 // 0000000000000000
 // 1110001100000001
 // `
-`0000000000001010\n0000000000001010`
+`0000000000001010\n0000000001001010`
   .split("\n")
   .filter((el) => el)
   .forEach((el, id) => {
@@ -59,7 +59,7 @@ const d = sixteenBitRegister();
 self.onmessage = ({ data }) => {
   // console.log(data);
   if (data.type === "screen") {
-    self.postMessage(rom());
+    self.postMessage(ram().splice(0, 20));
   }
   if (data.type === "reset") {
     computer();
@@ -70,7 +70,7 @@ async function computer() {
   while (true) {
     const actualPc = parseInt(pc().join(""), 2);
     await new Promise((resolve) => setTimeout(resolve, 0));
-    console.log(actualPc);
+    // console.log(actualPc);
 
     const romEl = rom()[actualPc];
     if (!romEl[0]) {
