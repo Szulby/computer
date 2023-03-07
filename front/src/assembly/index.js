@@ -36,6 +36,7 @@ fs.readFile("./input.txt", "utf8", (er, data) => {
     .replaceAll("\r\n", "\n")
     .replaceAll("\r", "\n")
     .split("\n")
+    .map((el) => el.trim())
     .filter((el) => el && !el.includes("//"));
 
   createAlias(input).forEach((line) => {
@@ -47,7 +48,7 @@ fs.readFile("./input.txt", "utf8", (er, data) => {
 
 function parse(line) {
   if (line.at(0) === "@") {
-    if (parseInt(line.slice(1))) {
+    if (!isNaN(parseInt(line.slice(1)))) {
       parsed.push((line.slice(1) >>> 0).toString(2).padStart(16, "0"));
     } else {
       const symbol = symbols[line.slice(1).toLowerCase()];
@@ -64,18 +65,26 @@ function parse(line) {
     const c = split(line);
     // controll instructions
     if (c[1].toLowerCase() === "0") base += "0101010";
+    if (c[1].toLowerCase() === "-1") base += "0111010";
     if (c[1].toLowerCase() === "d") base += "0001100";
+    if (c[1].toLowerCase() === "a") base += "0110000";
     if (c[1].toLowerCase() === "m") base += "1110000";
     if (c[1].toLowerCase() === "d+1") base += "0011111";
+    if (c[1].toLowerCase() === "d+a") base += "0000010";
     if (c[1].toLowerCase() === "a-1") base += "0110010";
+    if (c[1].toLowerCase() === "m-1") base += "1110010";
     if (c[1].toLowerCase() === "d-m") base += "1010011";
     // destination instructions
     if (!c[0]) base += "000";
     if (c[0].toLowerCase() === "m") base += "001";
     if (c[0].toLowerCase() === "d") base += "010";
+    if (c[0].toLowerCase() === "md" || c[0].toLowerCase() === "dm")
+      base += "011";
+    if (c[0].toLowerCase() === "a") base += "100";
     // if correct save
     if (!c[2]) base += "000";
     if (c[2].toLowerCase() === "jgt") base += "001";
+    if (c[2].toLowerCase() === "jle") base += "110";
     if (c[2].toLowerCase() === "jmp") base += "111";
     if (base.length === 16) parsed.push(base);
     else {

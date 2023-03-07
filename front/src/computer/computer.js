@@ -17,13 +17,17 @@ let { data } = await axios.get("/src/assembly/output");
 let preparedData = data.split("\n").filter((el) => el);
 
 const rom = memory(preparedData.length);
-const ram = memory(512);
-// `0000000000001010
-// 1110110010010000
-// 1110001100001000
-// 0000000000000000
-// 1110001100000001
-// `
+// const rom = memory(10);
+const ram = memory(1024 * 32);
+
+preparedData.forEach((el, id) => {
+  rom(
+    el.split("").map((el) => parseInt(el)),
+    id,
+    1
+  );
+});
+
 `0000000000001010\n0000000001001010`
   .split("\n")
   .filter((el) => el)
@@ -34,13 +38,7 @@ const ram = memory(512);
       1
     );
   });
-preparedData.forEach((el, id) => {
-  rom(
-    el.split("").map((el) => parseInt(el)),
-    id,
-    1
-  );
-});
+
 const pc = programCounter();
 
 const a = sixteenBitRegister();
@@ -57,37 +55,32 @@ const d = sixteenBitRegister();
 //   );
 // });
 self.onmessage = ({ data }) => {
-  // console.log(data);
   if (data.type === "screen") {
-    self.postMessage(ram().splice(0, 20));
+    self.postMessage(ram().slice(16384, 16384 + 8192));
   }
   if (data.type === "reset") {
-    computer();
+    pc(Array(16).fill(0), 1, 1);
   }
 };
-async function computer() {
-  pc(Array(16).fill(0), 1, 1);
-  while (true) {
-    const actualPc = parseInt(pc().join(""), 2);
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    // console.log(actualPc);
+while (true) {
+  const actualPc = parseInt(pc().join(""), 2);
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  console.log(actualPc);
 
-    const romEl = rom()[actualPc];
-    if (!romEl[0]) {
-      a(romEl, 1);
-    } else {
-      const aluResponse = alu(
-        d(),
-        mux16(a(), ram()[parseInt(a().join(""), 2)], romEl[3]),
-        [romEl[4], romEl[5], romEl[6], romEl[7], romEl[8], romEl[9]]
-      );
-      a(aluResponse.out, romEl[10]);
-      d(aluResponse.out, romEl[11]);
-      // store to ram
-      ram(d(), parseInt(a().join(""), 2), romEl[12]);
-      // jump
-      jmp(romEl, aluResponse, pc, a);
-    }
+  const romEl = rom()[actualPc];
+  if (!romEl[0]) {
+    a(romEl, 1);
+  } else {
+    const aluResponse = alu(
+      d(),
+      mux16(a(), ram()[parseInt(a().join(""), 2)], romEl[3]),
+      [romEl[4], romEl[5], romEl[6], romEl[7], romEl[8], romEl[9]]
+    );
+    a(aluResponse.out, romEl[10]);
+    d(aluResponse.out, romEl[11]);
+    // store to ram
+    ram(aluResponse.out, parseInt(a().join(""), 2), romEl[12]);
+    // jump
+    jmp(romEl, aluResponse, pc, a);
   }
 }
-computer();

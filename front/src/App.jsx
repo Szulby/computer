@@ -4,9 +4,12 @@ const worker = new Worker(new URL("./computer/computer", import.meta.url), {
 });
 function App() {
   const [screen, setScreen] = useState([]);
+
   useEffect(() => {
-    console.log("post message");
-    worker.postMessage({ type: "screen" });
+    setInterval(() => {
+      worker.postMessage({ type: "screen" });
+    }, 1000);
+    // console.log("post message");
   }, []);
   worker.onmessage = ({ data }) => {
     setScreen(data);
@@ -20,6 +23,7 @@ function App() {
       <button onClick={reset}>Reset</button>
       <canvas id="canvas" />
       <div style={{ width: 300 }}>
+        {screen.length}
         {screen.map((romEl, id) => (
           <p key={id}>{romEl}</p>
         ))}
