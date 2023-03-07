@@ -11,26 +11,36 @@ import axios from "axios";
 // readline.emitKeypressEvents(process.stdin);
 // if (process.stdin.isTTY) process.stdin.setRawMode(true);
 // process.exit();
-const rom = memory(5);
-const ram = memory(512);
+
 let { data } = await axios.get("/src/assembly/output");
 
+let preparedData = data.split("\n").filter((el) => el);
+
+const rom = memory(preparedData.length);
+const ram = memory(512);
 // `0000000000001010
 // 1110110010010000
 // 1110001100001000
 // 0000000000000000
 // 1110001100000001
 // `
-data
+`0000000000001010\n0000000000001010`
   .split("\n")
   .filter((el) => el)
   .forEach((el, id) => {
-    rom(
+    ram(
       el.split("").map((el) => parseInt(el)),
       id,
       1
     );
   });
+preparedData.forEach((el, id) => {
+  rom(
+    el.split("").map((el) => parseInt(el)),
+    id,
+    1
+  );
+});
 const pc = programCounter();
 
 const a = sixteenBitRegister();
