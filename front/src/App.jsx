@@ -8,6 +8,8 @@ function App() {
   useEffect(() => {
     setInterval(() => {
       worker.postMessage({ type: "screen" });
+      worker.postMessage({ type: "ramFront" });
+      worker.postMessage({ type: "stack" });
     }, 1000);
     // console.log("post message");
   }, []);

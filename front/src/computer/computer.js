@@ -28,16 +28,16 @@ preparedData.forEach((el, id) => {
   );
 });
 
-`0000000000001010\n0000000001001010`
-  .split("\n")
-  .filter((el) => el)
-  .forEach((el, id) => {
-    ram(
-      el.split("").map((el) => parseInt(el)),
-      id,
-      1
-    );
-  });
+// `0000000000001010\n0000000001001010`
+//   .split("\n")
+//   .filter((el) => el)
+//   .forEach((el, id) => {
+//     ram(
+//       el.split("").map((el) => parseInt(el)),
+//       id,
+//       1
+//     );
+//   });
 
 const pc = programCounter();
 
@@ -60,6 +60,12 @@ self.onmessage = ({ data }) => {
   }
   if (data.type === "reset") {
     pc(Array(16).fill(0), 1, 1);
+  }
+  if (data.type === "ramFront") {
+    console.log(ram().slice(0, 20));
+  }
+  if (data.type === "stack") {
+    console.log(ram().slice(256, 260));
   }
 };
 while (true) {

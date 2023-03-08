@@ -27,7 +27,7 @@ const symbols = {
 let symbolOffset = 16;
 const parsed = [];
 
-fs.readFile("./input.txt", "utf8", (er, data) => {
+fs.readFile("./asm.txt", "utf8", (er, data) => {
   if (er) {
     console.log(er);
     return;
@@ -70,6 +70,8 @@ function parse(line) {
     if (c[1].toLowerCase() === "a") base += "0110000";
     if (c[1].toLowerCase() === "m") base += "1110000";
     if (c[1].toLowerCase() === "d+1") base += "0011111";
+    if (c[1].toLowerCase() === "m+1") base += "1110111";
+    if (c[1].toLowerCase() === "m-1") base += "1110010";
     if (c[1].toLowerCase() === "d+a") base += "0000010";
     if (c[1].toLowerCase() === "a-1") base += "0110010";
     if (c[1].toLowerCase() === "m-1") base += "1110010";
@@ -81,14 +83,15 @@ function parse(line) {
     if (c[0].toLowerCase() === "md" || c[0].toLowerCase() === "dm")
       base += "011";
     if (c[0].toLowerCase() === "a") base += "100";
-    // if correct save
+    // jump instructions
     if (!c[2]) base += "000";
     if (c[2].toLowerCase() === "jgt") base += "001";
     if (c[2].toLowerCase() === "jle") base += "110";
     if (c[2].toLowerCase() === "jmp") base += "111";
+    // if correct save
     if (base.length === 16) parsed.push(base);
     else {
-      //   console.log(`incorrect parsed: ${line} to: ${base}`);
+      // console.log(`incorrect parsed: ${line} to: ${base}`);
       // break program if error
       console.log(symbols);
       console.log(parsed);
