@@ -62,10 +62,10 @@ self.onmessage = ({ data }) => {
     pc(Array(16).fill(0), 1, 1);
   }
   if (data.type === "ramFront") {
-    console.log(ram().slice(0, 20));
+    console.log("ramFront", ram().slice(0, 20));
   }
   if (data.type === "stack") {
-    console.log(ram().slice(256, 260));
+    console.log("stack", ram().slice(256, 260));
   }
 };
 while (true) {

@@ -2,7 +2,15 @@
 d=a 
 @sp
 m=d
+
 @17
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@15
 D=A
 @SP
 A=M

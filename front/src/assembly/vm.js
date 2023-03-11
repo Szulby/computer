@@ -11,14 +11,32 @@ const end = `
 @end
 0;jmp
 `;
-base += push() + end;
+
+const input = `
+push contant 17
+push contant 15
+`;
+
+input
+  .split("\n")
+  .filter((el) => el)
+  .forEach((line) => {
+    const splitted = line.split(" ");
+    if (splitted[0] === "push") {
+      if (splitted[1] === "contant") {
+        base += pushConstant(splitted[2]);
+      }
+    }
+  });
+
+base += end;
 fs.writeFile("asm.txt", base.trim(), (err) => {
   if (err) console.log(err);
 });
 
-function push() {
+function pushConstant(constant) {
   const push = `
-@17
+@${constant}
 D=A
 @SP
 A=M
@@ -26,5 +44,5 @@ M=D
 @SP
 M=M+1
 `;
-  return push.trim();
+  return push;
 }
