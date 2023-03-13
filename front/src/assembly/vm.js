@@ -15,6 +15,7 @@ const end = `
 const input = `
 push contant 17
 push contant 15
+pop local 1
 `;
 
 input
@@ -25,6 +26,11 @@ input
     if (splitted[0] === "push") {
       if (splitted[1] === "contant") {
         base += pushConstant(splitted[2]);
+      }
+    }
+    if (splitted[0] === "pop") {
+      if (splitted[1] === "local") {
+        base += popLocal(splitted[2]);
       }
     }
   });
@@ -45,4 +51,34 @@ M=D
 M=M+1
 `;
   return push;
+}
+function popLocal(offset) {
+  const out = `
+// create offset
+@${offset}
+d=a
+@300
+d=d+a
+@r1
+m=d
+// get from stack
+@sp
+a=m-1
+d=m
+// set local address
+@r1
+a=m
+// push local
+m=d
+// pop stack
+@0
+d=a
+@sp
+a=m-1
+m=d
+// decrement stack pointer
+@sp
+m=m-1
+`;
+  return out;
 }

@@ -10,6 +10,7 @@ function App() {
       worker.postMessage({ type: "screen" });
       worker.postMessage({ type: "ramFront" });
       worker.postMessage({ type: "stack" });
+      worker.postMessage({ type: "local" });
     }, 1000);
     // console.log("post message");
   }, []);
@@ -19,9 +20,13 @@ function App() {
   const reset = () => {
     worker.postMessage({ type: "reset" });
   };
+  const click = () => {
+    worker.postMessage({ type: "click" });
+  };
   return (
     <div className="App">
       <h1>Compik</h1>
+      <button onClick={click}>Click</button>
       <button onClick={reset}>Reset</button>
       <canvas id="canvas" />
       <div style={{ width: 300 }}>

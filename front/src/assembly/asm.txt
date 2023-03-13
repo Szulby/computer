@@ -10,6 +10,7 @@ A=M
 M=D
 @SP
 M=M+1
+
 @15
 D=A
 @SP
@@ -17,6 +18,33 @@ A=M
 M=D
 @SP
 M=M+1
+
+// create offset
+@1
+d=a
+@300
+d=d+a
+@r1
+m=d
+// get from stack
+@sp
+a=m-1
+d=m
+// set local address
+@r1
+a=m
+// push local
+m=d
+// pop stack
+@0
+d=a
+@sp
+a=m-1
+m=d
+// decrement stack pointer
+@sp
+m=m-1
+
 (end)
 @end
 0;jmp

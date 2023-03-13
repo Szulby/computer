@@ -54,7 +54,12 @@ const d = sixteenBitRegister();
 //     parseInt(str.toString("hex"), 16).toString(2).padStart(16, "0")
 //   );
 // });
+let infinity = true;
+let state = false;
 self.onmessage = ({ data }) => {
+  if (data.type === "click" || infinity) {
+    state = true;
+  }
   if (data.type === "screen") {
     self.postMessage(ram().slice(16384, 16384 + 8192));
   }
@@ -62,15 +67,40 @@ self.onmessage = ({ data }) => {
     pc(Array(16).fill(0), 1, 1);
   }
   if (data.type === "ramFront") {
-    console.log("ramFront", ram().slice(0, 20));
+    console.log(
+      "ramFront",
+      ram()
+        .slice(0, 20)
+        .map((el) => parseRamValue(el))
+    );
   }
   if (data.type === "stack") {
-    console.log("stack", ram().slice(256, 260));
+    console.log(
+      "stack",
+      ram()
+        .slice(256, 260)
+        .map((el) => parseRamValue(el))
+    );
+  }
+  if (data.type === "local") {
+    console.log(
+      "local",
+      ram()
+        .slice(300, 310)
+        .map((el) => parseRamValue(el))
+    );
   }
 };
-while (true) {
-  const actualPc = parseInt(pc().join(""), 2);
-  await new Promise((resolve) => setTimeout(resolve, 0));
+setInterval(() => {
+  if (state || infinity) {
+    computer();
+    state = false;
+  }
+}, 0);
+
+function computer() {
+  const actualPc = parseRamValue(pc());
+  // await new Promise((resolve) => setTimeout(resolve, 1));
   console.log(actualPc);
 
   const romEl = rom()[actualPc];
@@ -89,4 +119,8 @@ while (true) {
     // jump
     jmp(romEl, aluResponse, pc, a);
   }
+}
+
+function parseRamValue(input) {
+  return parseInt(input.join(""), 2);
 }
