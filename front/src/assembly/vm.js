@@ -5,6 +5,10 @@ let base = `
 d=a 
 @sp
 m=d
+@300
+d=a
+@r1
+m=d
 `;
 const end = `
 (end)
@@ -55,30 +59,19 @@ M=M+1
 function popLocal(offset) {
   const out = `
 // create offset
-@${offset}
-d=a
-@300
-d=d+a
-@r1
-m=d
-// get from stack
-@sp
-a=m-1
-d=m
-// set local address
-@r1
-a=m
-// push local
-m=d
-// pop stack
-@0
-d=a
-@sp
-a=m-1
-m=d
-// decrement stack pointer
-@sp
+@SP
 m=m-1
+a=m
+d=m
+@r1
+d=d+m
+@${offset}
+d=d+a
+@sp
+a=m
+a=m
+a=d-a
+m=d-a
 `;
   return out;
 }
