@@ -17,8 +17,7 @@ const end = `
 `;
 
 const input = `
-push contant 17
-push contant 15
+push contant 300
 pop local 1
 `;
 
@@ -34,7 +33,7 @@ input
     }
     if (splitted[0] === "pop") {
       if (splitted[1] === "local") {
-        base += popLocal(splitted[2]);
+        base += pop("@r1", splitted[2]);
       }
     }
   });
@@ -56,14 +55,14 @@ M=M+1
 `;
   return push;
 }
-function popLocal(offset) {
+function pop(type, offset) {
   const out = `
 // create offset
 @SP
 m=m-1
 a=m
 d=m
-@r1
+${type}
 d=d+m
 @${offset}
 d=d+a
