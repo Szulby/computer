@@ -9,6 +9,10 @@ m=d
 d=a
 @r1
 m=d
+@400
+d=a
+@r2
+m=d
 `;
 const end = `
 (end)
@@ -17,17 +21,21 @@ const end = `
 `;
 
 const input = `
-push contant 300
-pop local 1
+push constant 300
+push constant 400
+add
+pop argument 1
 `;
 
 input
   .split("\n")
   .filter((el) => el)
+  .filter((el) => !el.includes("//"))
   .forEach((line) => {
+    console.log(line);
     const splitted = line.split(" ");
     if (splitted[0] === "push") {
-      if (splitted[1] === "contant") {
+      if (splitted[1] === "constant") {
         base += pushConstant(splitted[2]);
       }
     }
@@ -35,6 +43,12 @@ input
       if (splitted[1] === "local") {
         base += pop("@r1", splitted[2]);
       }
+      if (splitted[1] === "argument") {
+        base += pop("@r2", splitted[2]);
+      }
+    }
+    if (splitted[0] === "add") {
+      base += add();
     }
   });
 
@@ -57,7 +71,6 @@ M=M+1
 }
 function pop(type, offset) {
   const out = `
-// create offset
 @SP
 m=m-1
 a=m
@@ -71,6 +84,24 @@ a=m
 a=m
 a=d-a
 m=d-a
+`;
+  return out;
+}
+function add() {
+  const out = `
+@SP
+m=m-1
+a=m
+d=m
+@sp
+m=m-1
+a=m
+d=d+m
+@sp
+a=m
+m=d
+@sp
+m=m+1
 `;
   return out;
 }

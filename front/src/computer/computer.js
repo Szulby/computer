@@ -17,7 +17,6 @@ let { data } = await axios.get("/src/assembly/output");
 let preparedData = data.split("\n").filter((el) => el);
 
 const rom = memory(preparedData.length);
-// const rom = memory(10);
 const ram = memory(1024 * 32);
 
 preparedData.forEach((el, id) => {
@@ -28,32 +27,11 @@ preparedData.forEach((el, id) => {
   );
 });
 
-// `0000000000001010\n0000000001001010`
-//   .split("\n")
-//   .filter((el) => el)
-//   .forEach((el, id) => {
-//     ram(
-//       el.split("").map((el) => parseInt(el)),
-//       id,
-//       1
-//     );
-//   });
-
 const pc = programCounter();
 
 const a = sixteenBitRegister();
 const d = sixteenBitRegister();
-// process.stdin.on("data", (str) => {
-//   // exit on esc
-//   if (str.toString("hex") === "1b") process.exit();
-//   //reset on ` press
-//   if (str.toString("hex") === "60") pc(0, 0, 1);
 
-//   console.log(
-//     str,
-//     parseInt(str.toString("hex"), 16).toString(2).padStart(16, "0")
-//   );
-// });
 let infinity = true;
 let state = false;
 self.onmessage = ({ data }) => {
@@ -87,6 +65,14 @@ self.onmessage = ({ data }) => {
       "local",
       ram()
         .slice(300, 310)
+        .map((el) => parseRamValue(el))
+    );
+  }
+  if (data.type === "argument") {
+    console.log(
+      "argument",
+      ram()
+        .slice(400, 410)
         .map((el) => parseRamValue(el))
     );
   }

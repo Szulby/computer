@@ -6,6 +6,10 @@ m=d
 d=a
 @r1
 m=d
+@400
+d=a
+@r2
+m=d
 
 @300
 D=A
@@ -15,12 +19,33 @@ M=D
 @SP
 M=M+1
 
-// create offset
+@400
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
 @SP
 m=m-1
 a=m
 d=m
-@r1
+@sp
+m=m-1
+a=m
+d=d+m
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+@SP
+m=m-1
+a=m
+d=m
+@r2
 d=d+m
 @1
 d=d+a

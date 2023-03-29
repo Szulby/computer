@@ -11,6 +11,7 @@ function App() {
       worker.postMessage({ type: "ramFront" });
       worker.postMessage({ type: "stack" });
       worker.postMessage({ type: "local" });
+      worker.postMessage({ type: "argument" });
     }, 1000);
     // console.log("post message");
   }, []);
