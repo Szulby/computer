@@ -17,7 +17,8 @@ let { data } = await axios.get("/src/assembly/output");
 let preparedData = data.split("\n").filter((el) => el);
 
 const rom = memory(preparedData.length);
-const ram = memory(1024 * 32);
+// min value of ram is biggest 16bit number because sometimes in register a is minus number and this provides issue with trying to read out of memory
+const ram = memory(1024 * 64);
 
 preparedData.forEach((el, id) => {
   rom(
@@ -98,15 +99,18 @@ function computer() {
       mux16(a(), ram()[parseInt(a().join(""), 2)], romEl[3]),
       [romEl[4], romEl[5], romEl[6], romEl[7], romEl[8], romEl[9]]
     );
-    a(aluResponse.out, romEl[10]);
-    d(aluResponse.out, romEl[11]);
     // store to ram
     ram(aluResponse.out, parseInt(a().join(""), 2), romEl[12]);
+
+    // then store to registers
+    a(aluResponse.out, romEl[10]);
+    d(aluResponse.out, romEl[11]);
+
     // jump
     jmp(romEl, aluResponse, pc, a);
   }
 }
 
 function parseRamValue(input) {
-  return parseInt(input.join(""), 2);
+  return parseInt(input.join(""), 2) - (input[0] ? Math.pow(2, 16) : 0);
 }

@@ -11,7 +11,7 @@ d=a
 @r2
 m=d
 
-@300
+@3
 D=A
 @SP
 A=M
@@ -19,7 +19,7 @@ M=D
 @SP
 M=M+1
 
-@400
+@1
 D=A
 @SP
 A=M
@@ -27,14 +27,12 @@ M=D
 @SP
 M=M+1
 
-@SP
-m=m-1
-a=m
+@sp
+am=m-1
 d=m
 @sp
-m=m-1
-a=m
-d=d+m
+am=m-1
+d=d-m
 @sp
 a=m
 m=d
@@ -42,8 +40,7 @@ m=d
 m=m+1
 
 @SP
-m=m-1
-a=m
+am=m-1
 d=m
 @r2
 d=d+m

@@ -79,6 +79,7 @@ function parse(line) {
     if (c[1].toLowerCase() === "d-m") base += "1010011";
     // destination instructions
     if (!c[0]) base += "000";
+    if (c[0].toLowerCase() === "am") base += "101";
     if (c[0].toLowerCase() === "m") base += "001";
     if (c[0].toLowerCase() === "d") base += "010";
     if (c[0].toLowerCase() === "md" || c[0].toLowerCase() === "dm")

@@ -21,9 +21,9 @@ const end = `
 `;
 
 const input = `
-push constant 300
-push constant 400
-add
+push constant 3
+push constant 1
+sub
 pop argument 1
 `;
 
@@ -32,7 +32,6 @@ input
   .filter((el) => el)
   .filter((el) => !el.includes("//"))
   .forEach((line) => {
-    console.log(line);
     const splitted = line.split(" ");
     if (splitted[0] === "push") {
       if (splitted[1] === "constant") {
@@ -49,6 +48,9 @@ input
     }
     if (splitted[0] === "add") {
       base += add();
+    }
+    if (splitted[0] === "sub") {
+      base += sub();
     }
   });
 
@@ -72,8 +74,7 @@ M=M+1
 function pop(type, offset) {
   const out = `
 @SP
-m=m-1
-a=m
+am=m-1
 d=m
 ${type}
 d=d+m
@@ -87,16 +88,32 @@ m=d-a
 `;
   return out;
 }
+
 function add() {
   const out = `
 @SP
-m=m-1
-a=m
+am=m-1
 d=m
 @sp
-m=m-1
-a=m
+am=m-1
 d=d+m
+@sp
+a=m
+m=d
+@sp
+m=m+1
+`;
+  return out;
+}
+
+function sub() {
+  const out = `
+@sp
+am=m-1
+d=m
+@sp
+am=m-1
+d=d-m
 @sp
 a=m
 m=d

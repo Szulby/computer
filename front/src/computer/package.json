@@ -1,5 +1,6 @@
 {
   "extension": "js",
+  "type": "module",
   "devDependencies": {
     "eslint": "^8.34.0"
   }
