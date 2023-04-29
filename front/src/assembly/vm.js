@@ -22,9 +22,10 @@ const end = `
 
 const input = `
 push constant 3
-push constant 1
-sub
-pop argument 1
+push constant 3
+eq
+// sub
+// pop argument 1
 `;
 
 input
@@ -51,6 +52,9 @@ input
     }
     if (splitted[0] === "sub") {
       base += sub();
+    }
+    if (splitted[0] === "eq") {
+      base += eq();
     }
   });
 
@@ -114,6 +118,24 @@ d=m
 @sp
 am=m-1
 d=d-m
+@sp
+a=m
+m=d
+@sp
+m= m+1
+`;
+  return out;
+}
+
+function eq() {
+  const out = `
+@sp
+am=m-1
+d=m
+@sp
+am=m-1
+d=d-m
+d=!d
 @sp
 a=m
 m=d

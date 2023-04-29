@@ -32,6 +32,7 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
     console.log(er);
     return;
   }
+  // main
   const input = data
     .replaceAll("\r\n", "\n")
     .replaceAll("\r", "\n")
@@ -45,7 +46,7 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
   console.log(parsed);
   save(parsed);
 });
-
+//
 function parse(line) {
   if (line.at(0) === "@") {
     if (!isNaN(parseInt(line.slice(1)))) {
@@ -68,6 +69,7 @@ function parse(line) {
     if (c[1].toLowerCase() === "-1") base += "0111010";
     if (c[1].toLowerCase() === "d") base += "0001100";
     if (c[1].toLowerCase() === "a") base += "0110000";
+    if (c[1].toLowerCase() === "!d") base += "0001101";
     if (c[1].toLowerCase() === "m") base += "1110000";
     if (c[1].toLowerCase() === "d+1") base += "0011111";
     if (c[1].toLowerCase() === "m+1") base += "1110111";
@@ -88,6 +90,7 @@ function parse(line) {
     // jump instructions
     if (!c[2]) base += "000";
     if (c[2].toLowerCase() === "jgt") base += "001";
+    if (c[2].toLowerCase() === "jeq") base += "010";
     if (c[2].toLowerCase() === "jle") base += "110";
     if (c[2].toLowerCase() === "jmp") base += "111";
     // if correct save
@@ -114,9 +117,7 @@ function split(line) {
   return tmp;
 }
 function createAlias(data) {
-  let index = data.findIndex((line) => {
-    return line.match(/\((.*?)\)/);
-  });
+  let index = data.findIndex((line) => line.match(/\((.*?)\)/));
 
   if (index !== -1) {
     symbols[data[index].replaceAll("(", "").replaceAll(")", "").toLowerCase()] =
