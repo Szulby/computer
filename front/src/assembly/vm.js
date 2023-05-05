@@ -21,9 +21,10 @@ const end = `
 `;
 
 const input = `
+label push_constant
 push constant 3
-push constant 3
-eq
+goto push_constant
+//eq
 // sub
 // pop argument 1
 `;
@@ -55,6 +56,12 @@ input
     }
     if (splitted[0] === "eq") {
       base += eq();
+    }
+    if(splitted[0] === 'label') {
+      base += label(splitted[1])
+    }
+    if(splitted[0] === 'goto') {
+      base += goto(splitted[1])
     }
   });
 
@@ -143,4 +150,19 @@ m=d
 m=m+1
 `;
   return out;
+}
+
+function label(label) {
+  const out = `
+(${label})  
+`
+  return out
+}
+
+function goto(label) {
+  const out = `
+@${label}
+0;jmp  
+`
+  return out 
 }

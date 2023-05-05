@@ -11,13 +11,7 @@ d=a
 @r2
 m=d
 
-@3
-D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
+(push_constant)  
 
 @3
 D=A
@@ -27,18 +21,8 @@ M=D
 @SP
 M=M+1
 
-@sp
-am=m-1
-d=m
-@sp
-am=m-1
-d=d-m
-d=!d
-@sp
-a=m
-m=d
-@sp
-m=m+1
+@push_constant
+0;jmp  
 
 (end)
 @end
