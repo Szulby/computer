@@ -23,7 +23,9 @@ const end = `
 const input = `
 label push_constant
 push constant 3
-goto push_constant
+push constant 3 
+eq
+if-goto push_constant
 //eq
 // sub
 // pop argument 1
@@ -62,6 +64,9 @@ input
     }
     if(splitted[0] === 'goto') {
       base += goto(splitted[1])
+    }
+    if(splitted[0] === 'if-goto') {
+      base += ifGoto(splitted[1])
     }
   });
 
@@ -152,17 +157,29 @@ m=m+1
   return out;
 }
 
-function label(label) {
+function label(symbol) {
   const out = `
-(${label})  
+(${symbol})  
 `
   return out
 }
 
-function goto(label) {
+function goto(symbol) {
   const out = `
-@${label}
+@${symbol}
 0;jmp  
 `
   return out 
+}
+
+function ifGoto(symbol) {
+  const out = `
+@sp
+am=m-1
+d=m
+d=!d
+@${symbol}
+d;jeq
+`
+return out
 }
