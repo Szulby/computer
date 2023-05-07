@@ -17,7 +17,7 @@ let { data } = await axios.get("/src/assembly/output");
 let preparedData = data.split("\n").filter((el) => el);
 
 const rom = memory(preparedData.length);
-// min value of ram is biggest 16bit number because sometimes in register a is minus number and this provides issue with trying to read out of memory
+// min length of ram is biggest 16bit number because sometimes in register a is minus number and this provides issue with trying to read out of memory
 const ram = memory(1024 * 64);
 
 preparedData.forEach((el, id) => {
@@ -34,10 +34,10 @@ const a = sixteenBitRegister();
 const d = sixteenBitRegister();
 
 let infinity = true;
-let state = false;
+let nextStep = false;
 self.onmessage = ({ data }) => {
   if (data.type === "click" || infinity) {
-    state = true;
+    nextStep = true;
   }
   if (data.type === "screen") {
     self.postMessage(ram().slice(16384, 16384 + 8192));
@@ -79,9 +79,9 @@ self.onmessage = ({ data }) => {
   }
 };
 setInterval(() => {
-  if (state || infinity) {
+  if (nextStep || infinity) {
     computer();
-    state = false;
+    nextStep = false;
   }
 }, 0);
 

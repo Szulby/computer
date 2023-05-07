@@ -23,7 +23,7 @@ const end = `
 const input = `
 label push_constant
 push constant 3
-push constant 3 
+push constant 2
 eq
 if-goto push_constant
 //eq
