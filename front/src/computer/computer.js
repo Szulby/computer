@@ -33,7 +33,7 @@ const pc = programCounter();
 const a = sixteenBitRegister();
 const d = sixteenBitRegister();
 
-let infinity = true;
+let infinity = false;
 let nextStep = false;
 self.onmessage = ({ data }) => {
   if (data.type === "click" || infinity) {
@@ -49,7 +49,7 @@ self.onmessage = ({ data }) => {
     console.log(
       "ramFront",
       ram()
-        .slice(0, 20)
+        .slice(0, 40)
         .map((el) => parseRamValue(el))
     );
   }
@@ -57,7 +57,7 @@ self.onmessage = ({ data }) => {
     console.log(
       "stack",
       ram()
-        .slice(256, 260)
+        .slice(256, 290)
         .map((el) => parseRamValue(el))
     );
   }

@@ -43,6 +43,7 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
   createAlias(input).forEach((line) => {
     parse(line);
   });
+  console.log(symbols);
   console.log(parsed);
   save(parsed);
 });

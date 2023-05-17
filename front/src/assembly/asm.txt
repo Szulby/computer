@@ -4,16 +4,21 @@ d=a
 m=d
 @300
 d=a
-@r1
+@lcl
 m=d
 @400
 d=a
-@r2
+@arg
 m=d
 
-(push_constant)  
+(mult)
 
-@3
+  @sp
+  am=m-1
+  a=m
+  0;jmp
+
+@2
 D=A
 @SP
 A=M
@@ -29,25 +34,16 @@ M=D
 @SP
 M=M+1
 
-@sp
-am=m-1
-d=m
-@sp
-am=m-1
-d=d-m
-d=!d
+@mult.ret
+d=a
 @sp
 a=m
 m=d
 @sp
 m=m+1
-
-@sp
-am=m-1
-d=m
-d=!d
-@push_constant
-d;jeq
+@mult
+0;jmp
+(mult.ret)
 
 (end)
 @end

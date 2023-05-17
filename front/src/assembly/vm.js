@@ -7,11 +7,11 @@ d=a
 m=d
 @300
 d=a
-@r1
+@lcl
 m=d
 @400
 d=a
-@r2
+@arg
 m=d
 `;
 const end = `
@@ -21,11 +21,14 @@ const end = `
 `;
 
 const input = `
-label push_constant
-push constant 3
 push constant 2
-eq
-if-goto push_constant
+push constant 2
+call mult 2
+function mult
+return
+// push constant 2
+// eq
+// if-goto push_constant
 //eq
 // sub
 // pop argument 1
@@ -44,10 +47,10 @@ input
     }
     if (splitted[0] === "pop") {
       if (splitted[1] === "local") {
-        base += pop("@r1", splitted[2]);
+        base += pop("@lcl", splitted[2]);
       }
       if (splitted[1] === "argument") {
-        base += pop("@r2", splitted[2]);
+        base += pop("@arg", splitted[2]);
       }
     }
     if (splitted[0] === "add") {
@@ -59,14 +62,23 @@ input
     if (splitted[0] === "eq") {
       base += eq();
     }
-    if(splitted[0] === 'label') {
-      base += label(splitted[1])
+    if (splitted[0] === "label") {
+      base += label(splitted[1]);
     }
-    if(splitted[0] === 'goto') {
-      base += goto(splitted[1])
+    if (splitted[0] === "goto") {
+      base += goto(splitted[1]);
     }
-    if(splitted[0] === 'if-goto') {
-      base += ifGoto(splitted[1])
+    if (splitted[0] === "if-goto") {
+      base += ifGoto(splitted[1]);
+    }
+    if (splitted[0] === "function") {
+      base += functionCreator(splitted[1]);
+    }
+    if (splitted[0] === "call") {
+      base += functionCaller(splitted[1]);
+    }
+    if (splitted[0] === "return") {
+      base += returnFunction();
     }
   });
 
@@ -160,16 +172,16 @@ m=m+1
 function label(symbol) {
   const out = `
 (${symbol})  
-`
-  return out
+`;
+  return out;
 }
 
 function goto(symbol) {
   const out = `
 @${symbol}
 0;jmp  
-`
-  return out 
+`;
+  return out;
 }
 
 function ifGoto(symbol) {
@@ -180,6 +192,38 @@ d=m
 d=!d
 @${symbol}
 d;jeq
-`
-return out
+`;
+  return out;
+}
+function functionCreator(name) {
+  const out = `
+(${name})
+`;
+  return out;
+}
+
+function functionCaller(name) {
+  const out = `
+@${name}.ret
+d=a
+@sp
+a=m
+m=d
+@sp
+m=m+1
+@${name}
+0;jmp
+(${name}.ret)
+`;
+  return out;
+}
+
+function returnFunction() {
+  const out = `
+  @sp
+  am=m-1
+  a=m
+  0;jmp
+`;
+  return out;
 }
