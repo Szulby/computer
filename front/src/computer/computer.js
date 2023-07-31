@@ -88,9 +88,10 @@ setInterval(() => {
 function computer() {
   const actualPc = parseRamValue(pc());
   // await new Promise((resolve) => setTimeout(resolve, 1));
-  console.log(actualPc);
 
   const romEl = rom()[actualPc];
+  console.log(actualPc, preparedData[actualPc]);
+
   if (!romEl[0]) {
     a(romEl, 1);
   } else {

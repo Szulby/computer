@@ -26,12 +26,13 @@ const input = `
 push constant 2
 push constant 2
 call mult 2
-call infinite
-function infinite
-call infinite
-return
+push constant 2
+// call infinite
 function mult
 return
+// function infinite
+// call infinite
+// return
 // push constant 2
 // eq
 // if-goto push_constant
@@ -240,8 +241,8 @@ function returnFunction() {
 @sp
 am=m-1
 a=m
-d=a
-a=d+1
+// d=a
+// a=d+1
 0;jmp
 `;
   return out;
