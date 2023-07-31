@@ -42,13 +42,52 @@ m=m+1
 0;jmp
 (mult.ret)
 
-// function crete mult
-(mult)
+// function caller inifinite
+@inifinite.ret
+d=a
+@sp
+a=m
+m=d
+@sp
+m=m+1
+@inifinite
+0;jmp
+(inifinite.ret)
+
+// function crete inifinite
+(inifinite)
+
+
+// function caller inifinite
+@inifinite.ret
+d=a
+@sp
+a=m
+m=d
+@sp
+m=m+1
+@inifinite
+0;jmp
+(inifinite.ret)
 
 // function return
 @sp
 am=m-1
 a=m
+d=a
+a=d+1
+0;jmp
+
+// function crete mult
+(mult)
+
+
+// function return
+@sp
+am=m-1
+a=m
+d=a
+a=d+1
 0;jmp
 
 // inifinite loop in the end

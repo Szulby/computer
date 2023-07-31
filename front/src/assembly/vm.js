@@ -26,6 +26,10 @@ const input = `
 push constant 2
 push constant 2
 call mult 2
+call inifinite
+function inifinite
+call inifinite
+return
 function mult
 return
 // push constant 2
@@ -208,6 +212,7 @@ function functionCreator(name) {
   const out = `
 // function crete ${name}
 (${name})
+${name === "inifinite" ? `` : ""}
 `;
   return out;
 }
@@ -235,6 +240,8 @@ function returnFunction() {
 @sp
 am=m-1
 a=m
+d=a
+a=d+1
 0;jmp
 `;
   return out;

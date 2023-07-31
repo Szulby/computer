@@ -1,3 +1,5 @@
+const debug = true;
+
 import fs from "fs";
 const symbols = {
   r0: 0,
@@ -51,14 +53,26 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
 function parse(line) {
   if (line.at(0) === "@") {
     if (!isNaN(parseInt(line.slice(1)))) {
-      parsed.push((line.slice(1) >>> 0).toString(2).padStart(16, "0"));
+      parsed.push(
+        debug
+          ? `${(line.slice(1) >>> 0).toString(2).padStart(16, "0")} ${line}`
+          : (line.slice(1) >>> 0).toString(2).padStart(16, "0")
+      );
     } else {
       const symbol = symbols[line.slice(1).toLowerCase()];
       if (!isNaN(symbol)) {
-        parsed.push(symbol.toString(2).padStart(16, "0"));
+        parsed.push(
+          debug
+            ? `${symbol.toString(2).padStart(16, "0")} ${line}`
+            : symbol.toString(2).padStart(16, "0")
+        );
       } else {
         symbols[line.slice(1).toLowerCase()] = symbolOffset;
-        parsed.push(symbolOffset.toString(2).padStart(16, "0"));
+        parsed.push(
+          debug
+            ? `${symbolOffset.toString(2).padStart(16, "0")} ${line}`
+            : symbolOffset.toString(2).padStart(16, "0")
+        );
         symbolOffset++;
       }
     }
@@ -95,7 +109,7 @@ function parse(line) {
     if (c[2].toLowerCase() === "jle") base += "110";
     if (c[2].toLowerCase() === "jmp") base += "111";
     // if correct save
-    if (base.length === 16) parsed.push(base);
+    if (base.length === 16) parsed.push(debug ? `${base} ${line}` : base);
     else {
       // console.log(`incorrect parsed: ${line} to: ${base}`);
       // break program if error
@@ -117,6 +131,7 @@ function split(line) {
   if (!line.includes(";")) tmp.push("");
   return tmp;
 }
+
 function createAlias(data) {
   let index = data.findIndex((line) => line.match(/\((.*?)\)/));
 
