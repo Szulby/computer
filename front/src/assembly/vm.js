@@ -217,9 +217,10 @@ function functionCreator(name) {
 }
 
 function functionCaller(name) {
+  const random = Math.random();
   const out = `
 // function caller ${name}
-@${name}.ret
+@${name}.ret.${random}
 d=a
 @sp
 a=m
@@ -228,7 +229,7 @@ m=d
 m=m+1
 @${name}
 0;jmp
-(${name}.ret)
+(${name}.ret.${random})
 `;
   return out;
 }

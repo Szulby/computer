@@ -31,7 +31,7 @@ M=D
 M=M+1
 
 // function caller mult
-@mult.ret
+@mult.ret.0.709085239166029
 d=a
 @sp
 a=m
@@ -40,35 +40,34 @@ m=d
 m=m+1
 @mult
 0;jmp
-(mult.ret)
+(mult.ret.0.709085239166029)
 
-// function caller inifinite
-@inifinite.ret
+// function caller infinite
+@infinite.ret.0.5501946353446041
 d=a
 @sp
 a=m
 m=d
 @sp
 m=m+1
-@inifinite
+@infinite
 0;jmp
-(inifinite.ret)
+(infinite.ret.0.5501946353446041)
 
-// function crete inifinite
-(inifinite)
+// function crete infinite
+(infinite)
 
-
-// function caller inifinite
-@inifinite.ret
+// function caller infinite
+@infinite.ret.0.8046358770872315
 d=a
 @sp
 a=m
 m=d
 @sp
 m=m+1
-@inifinite
+@infinite
 0;jmp
-(inifinite.ret)
+(infinite.ret.0.8046358770872315)
 
 // function return
 @sp
@@ -81,7 +80,6 @@ a=d+1
 // function crete mult
 (mult)
 
-
 // function return
 @sp
 am=m-1
@@ -90,7 +88,7 @@ d=a
 a=d+1
 0;jmp
 
-// inifinite loop in the end
+// infinite loop in the end
 (end)
 @end
 0;jmp
