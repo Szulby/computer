@@ -1,3 +1,4 @@
+// load stos, local and arg into ram
 @256
 d=a 
 @sp
@@ -11,13 +12,7 @@ d=a
 @arg
 m=d
 
-(mult)
-
-  @sp
-  am=m-1
-  a=m
-  0;jmp
-
+// push constant 2
 @2
 D=A
 @SP
@@ -26,6 +21,7 @@ M=D
 @SP
 M=M+1
 
+// push constant 2
 @2
 D=A
 @SP
@@ -34,6 +30,7 @@ M=D
 @SP
 M=M+1
 
+// function caller mult
 @mult.ret
 d=a
 @sp
@@ -45,6 +42,16 @@ m=m+1
 0;jmp
 (mult.ret)
 
+// function crete mult
+(mult)
+
+// function return
+@sp
+am=m-1
+a=m
+0;jmp
+
+// inifinite loop in the end
 (end)
 @end
 0;jmp

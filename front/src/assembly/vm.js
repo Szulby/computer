@@ -1,6 +1,7 @@
 import fs from "fs";
 
 let base = `
+// load stos, local and arg into ram
 @256
 d=a 
 @sp
@@ -15,6 +16,7 @@ d=a
 m=d
 `;
 const end = `
+// inifinite loop in the end
 (end)
 @end
 0;jmp
@@ -29,7 +31,7 @@ return
 // push constant 2
 // eq
 // if-goto push_constant
-//eq
+// eq
 // sub
 // pop argument 1
 `;
@@ -89,6 +91,7 @@ fs.writeFile("asm.txt", base.trim(), (err) => {
 
 function pushConstant(constant) {
   const push = `
+// push constant ${constant}
 @${constant}
 D=A
 @SP
@@ -101,6 +104,7 @@ M=M+1
 }
 function pop(type, offset) {
   const out = `
+// pop {to register} offset ${offset}
 @SP
 am=m-1
 d=m
@@ -119,6 +123,7 @@ m=d-a
 
 function add() {
   const out = `
+// add
 @SP
 am=m-1
 d=m
@@ -136,6 +141,7 @@ m=m+1
 
 function sub() {
   const out = `
+// sub
 @sp
 am=m-1
 d=m
@@ -153,6 +159,7 @@ m= m+1
 
 function eq() {
   const out = `
+// eq 
 @sp
 am=m-1
 d=m
@@ -178,6 +185,7 @@ function label(symbol) {
 
 function goto(symbol) {
   const out = `
+// go-to
 @${symbol}
 0;jmp  
 `;
@@ -186,6 +194,7 @@ function goto(symbol) {
 
 function ifGoto(symbol) {
   const out = `
+// if go-to
 @sp
 am=m-1
 d=m
@@ -197,6 +206,7 @@ d;jeq
 }
 function functionCreator(name) {
   const out = `
+// function crete ${name}
 (${name})
 `;
   return out;
@@ -204,6 +214,7 @@ function functionCreator(name) {
 
 function functionCaller(name) {
   const out = `
+// function caller ${name}
 @${name}.ret
 d=a
 @sp
@@ -220,10 +231,11 @@ m=m+1
 
 function returnFunction() {
   const out = `
-  @sp
-  am=m-1
-  a=m
-  0;jmp
+// function return
+@sp
+am=m-1
+a=m
+0;jmp
 `;
   return out;
 }

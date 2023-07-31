@@ -33,7 +33,7 @@ const pc = programCounter();
 const a = sixteenBitRegister();
 const d = sixteenBitRegister();
 
-let infinity = false;
+let infinity = true;
 let nextStep = false;
 self.onmessage = ({ data }) => {
   if (data.type === "click" || infinity) {
