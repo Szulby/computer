@@ -30,18 +30,6 @@ M=D
 @SP
 M=M+1
 
-// function caller mult
-@mult.ret.0.09220997525813335
-d=a
-@sp
-a=m
-m=d
-@sp
-m=m+1
-@mult
-0;jmp
-(mult.ret.0.09220997525813335)
-
 // push constant 2
 @2
 D=A
@@ -50,6 +38,18 @@ A=M
 M=D
 @SP
 M=M+1
+
+// function caller infinite
+@infinite.ret.0.9753046890896306
+d=a
+@sp
+a=m
+m=d
+@sp
+m=m+1
+@infinite
+0;jmp
+(infinite.ret.0.9753046890896306)
 
 // function crete mult
 (mult)
@@ -62,7 +62,19 @@ a=m
 // a=d+1
 0;jmp
 
-// infinite loop in the end
-(end)
+// function crete infinite
+(infinite)
+
+(end)  
+
+// go-to
 @end
+0;jmp  
+
+// function return
+@sp
+am=m-1
+a=m
+// d=a
+// a=d+1
 0;jmp

@@ -15,22 +15,25 @@ d=a
 @arg
 m=d
 `;
-const end = `
-// infinite loop in the end
-(end)
-@end
-0;jmp
-`;
+// const end = `
+// // infinite loop in the end
+// (end)
+// @end
+// 0;jmp
+// `;
 
 const input = `
 push constant 2
 push constant 2
-call mult 2
+// call mult 2
 push constant 2
-// call infinite
+call infinite
 function mult
 return
-// function infinite
+function infinite
+label end
+goto end
+return
 // call infinite
 // return
 // push constant 2
@@ -89,7 +92,7 @@ input
     }
   });
 
-base += end;
+// base += end;
 fs.writeFile("asm.txt", base.trim(), (err) => {
   if (err) console.log(err);
 });
