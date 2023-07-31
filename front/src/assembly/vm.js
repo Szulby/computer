@@ -16,7 +16,7 @@ d=a
 m=d
 `;
 const end = `
-// inifinite loop in the end
+// infinite loop in the end
 (end)
 @end
 0;jmp
@@ -26,9 +26,9 @@ const input = `
 push constant 2
 push constant 2
 call mult 2
-call inifinite
-function inifinite
-call inifinite
+call infinite
+function infinite
+call infinite
 return
 function mult
 return
@@ -212,7 +212,6 @@ function functionCreator(name) {
   const out = `
 // function crete ${name}
 (${name})
-${name === "inifinite" ? `` : ""}
 `;
   return out;
 }
