@@ -40,7 +40,7 @@ M=D
 M=M+1
 
 // function caller infinite
-@infinite.ret.0.9753046890896306
+@infinite.ret.0.23446783495617218
 d=a
 @sp
 a=m
@@ -49,7 +49,7 @@ m=d
 m=m+1
 @infinite
 0;jmp
-(infinite.ret.0.9753046890896306)
+(infinite.ret.0.23446783495617218)
 
 // function crete mult
 (mult)
@@ -65,6 +65,7 @@ a=m
 // function crete infinite
 (infinite)
 
+// label end
 (end)  
 
 // go-to

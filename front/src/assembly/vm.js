@@ -31,8 +31,8 @@ call infinite
 function mult
 return
 function infinite
-label end
-goto end
+  label end
+  goto end
 return
 // call infinite
 // return
@@ -43,11 +43,11 @@ return
 // sub
 // pop argument 1
 `;
-
 input
   .split("\n")
   .filter((el) => el)
   .filter((el) => !el.includes("//"))
+  .map((el) => el.trim())
   .forEach((line) => {
     const splitted = line.split(" ");
     if (splitted[0] === "push") {
@@ -186,6 +186,7 @@ m=m+1
 
 function label(symbol) {
   const out = `
+// label ${symbol}
 (${symbol})  
 `;
   return out;
