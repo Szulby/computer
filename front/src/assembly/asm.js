@@ -46,7 +46,7 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
     parse(line);
   });
   console.log(symbols);
-  console.log(parsed);
+  // console.log(parsed);
   save(parsed);
 });
 //

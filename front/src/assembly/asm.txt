@@ -15,32 +15,44 @@ m=d
 // push constant 2
 @2
 D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
+@sp
+a=m
+m=d
+@sp
+m=m+1
 
-// push constant 2
-@2
+// push constant 3
+@3
 D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
+@sp
+a=m
+m=d
+@sp
+m=m+1
 
-// push constant 2
-@2
+// push constant 4
+@4
 D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+// push local 1
+@lcl
+d=m
+@1
+a=d+a
+d=m
+@sp
+a=m
+m=d
+@sp
+m=m+1
 
 // function caller infinite
-@infinite.ret.0.23446783495617218
+@infinite.ret.0.09620267270150662
 d=a
 @sp
 a=m
@@ -49,21 +61,23 @@ m=d
 m=m+1
 @infinite
 0;jmp
-(infinite.ret.0.23446783495617218)
+(infinite.ret.0.09620267270150662)
 
 // function crete mult
 (mult)
 
+
 // function return
 @sp
 am=m-1
-a=m
-// d=a
-// a=d+1
+d=m
+@r14
+am=d
 0;jmp
 
 // function crete infinite
 (infinite)
+
 
 // label end
 (end)  
@@ -75,7 +89,7 @@ a=m
 // function return
 @sp
 am=m-1
-a=m
-// d=a
-// a=d+1
+d=m
+@r14
+am=d
 0;jmp

@@ -24,16 +24,29 @@ m=d
 
 const input = `
 push constant 2
-push constant 2
+push constant 3
+push constant 4
+// pop local 1
+// pop local 2
+push local 1
+
 // call mult 2
-push constant 2
+
+//end of program
 call infinite
+
+//function declaration
 function mult
 return
+
 function infinite
   label end
   goto end
 return
+
+
+
+
 // call infinite
 // return
 // push constant 2
@@ -43,16 +56,24 @@ return
 // sub
 // pop argument 1
 `;
+
+const registerTypesEnum = {
+  local: "@lcl",
+  argument: "@arg",
+};
+
 input
   .split("\n")
-  .filter((el) => el)
-  .filter((el) => !el.includes("//"))
+  .filter((el) => el && !el.includes("//"))
   .map((el) => el.trim())
   .forEach((line) => {
     const splitted = line.split(" ");
     if (splitted[0] === "push") {
       if (splitted[1] === "constant") {
         base += pushConstant(splitted[2]);
+      }
+      if (Object.keys(registerTypesEnum).find((el) => el === splitted[1])) {
+        base += pushToStock(splitted[1], splitted[2]);
       }
     }
     if (splitted[0] === "pop") {
@@ -97,16 +118,34 @@ fs.writeFile("asm.txt", base.trim(), (err) => {
   if (err) console.log(err);
 });
 
+function pushToStock(type, offset) {
+  const out = `
+// push ${type} ${offset}
+${registerTypesEnum[type]}
+d=m
+@${offset}
+a=d+a
+d=m
+${pushD()}
+`;
+
+  return out;
+}
+function pushD() {
+  return `
+@sp
+a=m
+m=d
+@sp
+m=m+1  
+`.trim();
+}
 function pushConstant(constant) {
   const push = `
 // push constant ${constant}
 @${constant}
 D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
+${pushD()}
 `;
   return push;
 }
@@ -217,6 +256,7 @@ function functionCreator(name) {
   const out = `
 // function crete ${name}
 (${name})
+
 `;
   return out;
 }
@@ -244,9 +284,9 @@ function returnFunction() {
 // function return
 @sp
 am=m-1
-a=m
-// d=a
-// a=d+1
+d=m
+@r14
+am=d
 0;jmp
 `;
   return out;
