@@ -52,16 +52,66 @@ m=d
 m=m+1
 
 // function caller infinite
-@infinite.ret.0.09620267270150662
+// push return adress to stack
+@infinite.ret.0.3196649638506479
 d=a
 @sp
 a=m
 m=d
 @sp
 m=m+1
+// push local, arg, this, that offset to stack
+@LCL
+D=M
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+@ARG
+D=M
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+@THIS
+D=M
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+@THAT
+D=M
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+// set new arg
+@SP
+D=M
+@7
+D=D-A
+@ARG
+M=D
+
+// Ustawienie LCL na pozycję SP
+@SP
+D=M
+@LCL
+M=D
+
+// jump to function
 @infinite
 0;jmp
-(infinite.ret.0.09620267270150662)
+// create alias for return flow
+(infinite.ret.0.3196649638506479)
 
 // function crete mult
 (mult)

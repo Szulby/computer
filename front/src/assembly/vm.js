@@ -15,6 +15,7 @@ d=a
 @arg
 m=d
 `;
+
 // const end = `
 // // infinite loop in the end
 // (end)
@@ -33,7 +34,7 @@ push local 1
 // call mult 2
 
 //end of program
-call infinite
+call infinite 2
 
 //function declaration
 function mult
@@ -73,7 +74,7 @@ input
         base += pushConstant(splitted[2]);
       }
       if (Object.keys(registerTypesEnum).find((el) => el === splitted[1])) {
-        base += pushToStock(splitted[1], splitted[2]);
+        base += pushToStack(splitted[1], splitted[2]);
       }
     }
     if (splitted[0] === "pop") {
@@ -106,7 +107,7 @@ input
       base += functionCreator(splitted[1]);
     }
     if (splitted[0] === "call") {
-      base += functionCaller(splitted[1]);
+      base += functionCaller(splitted[1], splitted[2]);
     }
     if (splitted[0] === "return") {
       base += returnFunction();
@@ -118,7 +119,7 @@ fs.writeFile("asm.txt", base.trim(), (err) => {
   if (err) console.log(err);
 });
 
-function pushToStock(type, offset) {
+function pushToStack(type, offset) {
   const out = `
 // push ${type} ${offset}
 ${registerTypesEnum[type]}
@@ -261,19 +262,49 @@ function functionCreator(name) {
   return out;
 }
 
-function functionCaller(name) {
+function functionCaller(name, argsLength) {
   const random = Math.random();
   const out = `
 // function caller ${name}
+// push return adress to stack
 @${name}.ret.${random}
 d=a
-@sp
-a=m
-m=d
-@sp
-m=m+1
+${pushD()}
+// push local, arg, this, that offset to stack
+@LCL
+D=M
+${pushD()}
+
+@ARG
+D=M
+${pushD()}
+
+@THIS
+D=M
+${pushD()}
+
+@THAT
+D=M
+${pushD()}
+
+// set new arg
+@SP
+D=M
+@${parseInt(argsLength) + 5}
+D=D-A
+@ARG
+M=D
+
+// Ustawienie LCL na pozycję SP
+@SP
+D=M
+@LCL
+M=D
+
+// jump to function
 @${name}
 0;jmp
+// create alias for return flow
 (${name}.ret.${random})
 `;
   return out;
