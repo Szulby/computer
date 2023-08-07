@@ -1,6 +1,6 @@
 push constant 2
 push constant 3
-push constant 4
+push constant 42
 call add 2
 call infinite 0
 
