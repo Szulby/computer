@@ -1,6 +1,6 @@
 import fs from "fs";
 
-let base = `
+let output = `
 // load stos, local and arg into ram
 @256
 d=a 
@@ -16,114 +16,68 @@ d=a
 m=d
 `;
 
-// const end = `
-// // infinite loop in the end
-// (end)
-// @end
-// 0;jmp
-// `;
-
-const input = `
-push constant 2
-push constant 3
-push constant 4
-// pop local 1
-// pop local 2
-// push local 1
-
-call add 2
-// stop
-//end of program
-call infinite 2
-
-//function declaration
-function add 2
-  push argument 0
-  push argument 1
-  add
-return
-
-
-function infinite
-  label end
-  goto end
-return
-
-
-
-
-// call infinite
-// return
-// push constant 2
-// eq
-// if-goto push_constant
-// eq
-// sub
-// pop argument 1
-`;
-
 const registerTypesEnum = {
   local: "@lcl",
   argument: "@arg",
 };
 
-input
-  .split("\n")
-  .filter((el) => el && !el.includes("//"))
-  .map((el) => el.trim())
-  .forEach((line) => {
-    const splitted = line.split(" ");
-    if (splitted[0] === "stop") {
-      base += stop();
-    }
-    if (splitted[0] === "push") {
-      if (splitted[1] === "constant") {
-        base += pushConstant(splitted[2]);
+fs.readFile("./vm.txt", "utf8", (err, data) => {
+  data
+    .split("\n")
+    .filter((el) => el && !el.includes("//"))
+    .map((el) => el.trim())
+    .forEach((line) => {
+      const splitted = line.split(" ");
+      if (splitted[0] === "stop") {
+        output += stop();
       }
-      if (Object.keys(registerTypesEnum).find((el) => el === splitted[1])) {
-        base += pushToStack(splitted[1], splitted[2]);
+      if (splitted[0] === "push") {
+        if (splitted[1] === "constant") {
+          output += pushConstant(splitted[2]);
+        }
+        if (Object.keys(registerTypesEnum).find((el) => el === splitted[1])) {
+          output += pushToStack(splitted[1], splitted[2]);
+        }
       }
-    }
-    if (splitted[0] === "pop") {
-      if (splitted[1] === "local") {
-        base += pop("@lcl", splitted[2]);
+      if (splitted[0] === "pop") {
+        if (splitted[1] === "local") {
+          output += pop("@lcl", splitted[2]);
+        }
+        if (splitted[1] === "argument") {
+          output += pop("@arg", splitted[2]);
+        }
       }
-      if (splitted[1] === "argument") {
-        base += pop("@arg", splitted[2]);
+      if (splitted[0] === "add") {
+        output += add();
       }
-    }
-    if (splitted[0] === "add") {
-      base += add();
-    }
-    if (splitted[0] === "sub") {
-      base += sub();
-    }
-    if (splitted[0] === "eq") {
-      base += eq();
-    }
-    if (splitted[0] === "label") {
-      base += label(splitted[1]);
-    }
-    if (splitted[0] === "goto") {
-      base += goto(splitted[1]);
-    }
-    if (splitted[0] === "if-goto") {
-      base += ifGoto(splitted[1]);
-    }
-    if (splitted[0] === "function") {
-      base += functionCreator(splitted[1]);
-    }
-    if (splitted[0] === "call") {
-      base += functionCaller(splitted[1], splitted[2]);
-    }
-    if (splitted[0] === "return") {
-      base += returnFunction();
-    }
+      if (splitted[0] === "sub") {
+        output += sub();
+      }
+      if (splitted[0] === "eq") {
+        output += eq();
+      }
+      if (splitted[0] === "label") {
+        output += label(splitted[1]);
+      }
+      if (splitted[0] === "goto") {
+        output += goto(splitted[1]);
+      }
+      if (splitted[0] === "if-goto") {
+        output += ifGoto(splitted[1]);
+      }
+      if (splitted[0] === "function") {
+        output += functionCreator(splitted[1]);
+      }
+      if (splitted[0] === "call") {
+        output += functionCaller(splitted[1], splitted[2]);
+      }
+      if (splitted[0] === "return") {
+        output += returnFunction();
+      }
+    });
+  fs.writeFile("asm.txt", output.trim(), (err) => {
+    if (err) console.log(err);
   });
-
-// base += end;
-fs.writeFile("asm.txt", base.trim(), (err) => {
-  if (err) console.log(err);
 });
 
 function stop() {
