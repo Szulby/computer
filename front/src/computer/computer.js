@@ -90,7 +90,13 @@ function computer() {
   // await new Promise((resolve) => setTimeout(resolve, 1));
 
   const romEl = rom()[actualPc];
+
   console.log(actualPc, preparedData[actualPc]);
+
+  if (romEl.join("") === "1111111111111111") {
+    infinity = false;
+    return;
+  }
 
   if (!romEl[0]) {
     a(romEl, 1);

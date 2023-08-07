@@ -29,16 +29,20 @@ push constant 3
 push constant 4
 // pop local 1
 // pop local 2
-push local 1
+// push local 1
 
-// call mult 2
-
+call add 2
+// stop
 //end of program
 call infinite 2
 
 //function declaration
-function mult
+function add 2
+  push argument 0
+  push argument 1
+  add
 return
+
 
 function infinite
   label end
@@ -69,6 +73,9 @@ input
   .map((el) => el.trim())
   .forEach((line) => {
     const splitted = line.split(" ");
+    if (splitted[0] === "stop") {
+      base += stop();
+    }
     if (splitted[0] === "push") {
       if (splitted[1] === "constant") {
         base += pushConstant(splitted[2]);
@@ -118,6 +125,13 @@ input
 fs.writeFile("asm.txt", base.trim(), (err) => {
   if (err) console.log(err);
 });
+
+function stop() {
+  const out = `
+stop
+`;
+  return out;
+}
 
 function pushToStack(type, offset) {
   const out = `
@@ -313,12 +327,65 @@ M=D
 function returnFunction() {
   const out = `
 // function return
-@sp
-am=m-1
+
+// // Przywrócenie wartości wyniku do segmentu lokalnego 0
+// @SP
+// A=M-1
+// D=M
+// @LCL
+// A=M 
+// M=D
+
+// local to r13
+@LCL
+D=M
+@R13
+M=D
+
+// save return stack addres to r14
+@lcl
 d=m
+@5
+d=d-a
 @r14
-am=d
-0;jmp
+m=d
+
+// set local 0 to arg 0
+@SP
+A=M-1
+D=M
+@ARG
+A=M
+M=D
+
+// 4. SP = ARG + 1
+@ARG
+D=M+1
+@SP
+M=D
+
+// 7. ARG 
+@R13
+D=M
+@3
+A=D-A
+D=M
+@ARG
+M=D
+
+// 8. LCL
+@R13
+D=M
+@4
+A=D-A
+D=M
+@LCL
+M=D
+//  goto RET
+@R14
+A=M
+a=m
+0;JMP
 `;
   return out;
 }

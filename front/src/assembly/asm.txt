@@ -39,21 +39,71 @@ m=d
 @sp
 m=m+1
 
-// push local 1
-@lcl
-d=m
-@1
-a=d+a
-d=m
+// function caller add
+// push return adress to stack
+@add.ret.0.25488071961130343
+d=a
+@sp
+a=m
+m=d
+@sp
+m=m+1
+// push local, arg, this, that offset to stack
+@LCL
+D=M
 @sp
 a=m
 m=d
 @sp
 m=m+1
 
+@ARG
+D=M
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+@THIS
+D=M
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+@THAT
+D=M
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+// set new arg
+@SP
+D=M
+@7
+D=D-A
+@ARG
+M=D
+
+// Ustawienie LCL na pozycję SP
+@SP
+D=M
+@LCL
+M=D
+
+// jump to function
+@add
+0;jmp
+// create alias for return flow
+(add.ret.0.25488071961130343)
+
 // function caller infinite
 // push return adress to stack
-@infinite.ret.0.3196649638506479
+@infinite.ret.0.6317507418217359
 d=a
 @sp
 a=m
@@ -111,19 +161,109 @@ M=D
 @infinite
 0;jmp
 // create alias for return flow
-(infinite.ret.0.3196649638506479)
+(infinite.ret.0.6317507418217359)
 
-// function crete mult
-(mult)
+// function crete add
+(add)
 
 
-// function return
+// push argument 0
+@arg
+d=m
+@0
+a=d+a
+d=m
 @sp
+a=m
+m=d
+@sp
+m=m+1
+
+// push argument 1
+@arg
+d=m
+@1
+a=d+a
+d=m
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+// add
+@SP
 am=m-1
 d=m
+@sp
+am=m-1
+d=d+m
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+// function return
+
+// // Przywrócenie wartości wyniku do segmentu lokalnego 0
+// @SP
+// A=M-1
+// D=M
+// @LCL
+// A=M 
+// M=D
+
+// local to r13
+@LCL
+D=M
+@R13
+M=D
+
+// save return stack addres to r14
+@lcl
+d=m
+@5
+d=d-a
 @r14
-am=d
-0;jmp
+m=d
+
+// set local 0 to arg 0
+@SP
+A=M-1
+D=M
+@ARG
+A=M
+M=D
+
+// 4. SP = ARG + 1
+@ARG
+D=M+1
+@SP
+M=D
+
+// 7. ARG 
+@R13
+D=M
+@3
+A=D-A
+D=M
+@ARG
+M=D
+
+// 8. LCL
+@R13
+D=M
+@4
+A=D-A
+D=M
+@LCL
+M=D
+//  goto RET
+@R14
+A=M
+a=m
+0;JMP
 
 // function crete infinite
 (infinite)
@@ -137,9 +277,62 @@ am=d
 0;jmp  
 
 // function return
-@sp
-am=m-1
+
+// // Przywrócenie wartości wyniku do segmentu lokalnego 0
+// @SP
+// A=M-1
+// D=M
+// @LCL
+// A=M 
+// M=D
+
+// local to r13
+@LCL
+D=M
+@R13
+M=D
+
+// save return stack addres to r14
+@lcl
 d=m
+@5
+d=d-a
 @r14
-am=d
-0;jmp
+m=d
+
+// set local 0 to arg 0
+@SP
+A=M-1
+D=M
+@ARG
+A=M
+M=D
+
+// 4. SP = ARG + 1
+@ARG
+D=M+1
+@SP
+M=D
+
+// 7. ARG 
+@R13
+D=M
+@3
+A=D-A
+D=M
+@ARG
+M=D
+
+// 8. LCL
+@R13
+D=M
+@4
+A=D-A
+D=M
+@LCL
+M=D
+//  goto RET
+@R14
+A=M
+a=m
+0;JMP

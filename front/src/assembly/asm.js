@@ -45,7 +45,7 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
   createAlias(input).forEach((line) => {
     parse(line);
   });
-  console.log(symbols);
+  // console.log(symbols);
   // console.log(parsed);
   save(parsed);
 });
@@ -77,8 +77,13 @@ function parse(line) {
       }
     }
   } else {
+    if (line === "stop") {
+      parsed.push("1111111111111111 stop");
+      return;
+    }
     let base = "111";
     const c = split(line);
+
     // controll instructions
     if (c[1].toLowerCase() === "0") base += "0101010";
     if (c[1].toLowerCase() === "-1") base += "0111010";
@@ -113,8 +118,8 @@ function parse(line) {
     else {
       // console.log(`incorrect parsed: ${line} to: ${base}`);
       // break program if error
-      console.log(symbols);
-      console.log(parsed);
+      // console.log(symbols);
+      // console.log(parsed);
       throw new Error(`incorrect parsed: ${line} to: ${base}\n`);
     }
   }
