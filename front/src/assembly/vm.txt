@@ -1,11 +1,17 @@
 push constant 2
+push constant 3
+push constant 4
+call add 2
 call infinite 0
-function add
-push argument 0
-push argument 1
-add
-return
+
 function infinite
-label end
-goto end
+  label end
+  goto end
+return
+
+
+function add 
+  push argument 0
+  push argument 1
+  add
 return
