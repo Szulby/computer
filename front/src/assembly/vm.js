@@ -120,7 +120,7 @@ ${pushD()}
 }
 function pop(type, offset) {
   const out = `
-// pop {to register} offset ${offset}
+// pop ${type} offset ${offset}
 @SP
 am=m-1
 d=m
