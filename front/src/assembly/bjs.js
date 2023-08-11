@@ -1,6 +1,6 @@
 import fs from "fs";
 const mult = `
-function mult 2 
+function mult 2
   push argument 0
   push argument 1
   
@@ -30,8 +30,8 @@ const input = `
 import infinite
 import add
 import mult
-// push constant 2
-// mult(2,3)
+
+let a = 123
 add(3,42)
 
 infinite()
@@ -77,6 +77,8 @@ for (let i = 0; i < parsed.length; i++) {
       output.push("stop");
     } else if (parsed[i] === "import") {
       importFunction(parsed[i + 1]);
+    } else if (parsed[i] === "let") {
+      createVariable(parsed[i + 1], parsed[i + 3], output);
     } else if (findFunction && parsed[i + 1] === "(") {
       const args = Array.from(Array(model[parsed[i]].length)).map((_, id) => {
         let items = [2, 4, 6, 8];
@@ -99,7 +101,7 @@ fs.writeFile("./vm.txt", output.join("\n"), (err) => {
 
 function importFunction(importName) {
   model[importName] = {
-    function: functions[importName].trim(),
+    function: functions[importName],
     length: parseInt(functions[importName].trim().split(" ")[2]),
   };
 }
@@ -113,4 +115,12 @@ function functionCaller([name, args], output) {
   let temp = args.map((el) => `push constant ${el}`);
   temp.push(`call ${name} ${args.length}`);
   output.push(...temp);
+}
+
+function createVariable(name, value, output) {
+  const out = `
+push constant ${value}
+pop ${name}
+  `;
+  output.push(out);
 }

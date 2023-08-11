@@ -45,7 +45,10 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
   createAlias(input).forEach((line) => {
     parse(line);
   });
-  // console.log(symbols);
+  console.log(symbols, Object.keys(symbols).length);
+  if (Object.keys(symbols).length > 250) {
+    throw `to many symbols ${Object.keys(symbols).length}`;
+  }
   // console.log(parsed);
   save(parsed);
 });

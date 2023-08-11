@@ -12,6 +12,22 @@ d=a
 @arg
 m=d
 
+// push constant 123
+@123
+D=A
+@sp
+a=m
+m=d
+@sp
+m=m+1
+
+// pop to a
+@sp
+am=m-1
+d=m
+@a
+m=d
+
 // push constant 3
 @3
 D=A
@@ -32,7 +48,7 @@ m=m+1
 
 // function caller add
 // push return adress to stack
-@add.ret.0.6113899924889925
+@add.ret.0.3085748898469147
 d=a
 @sp
 a=m
@@ -90,11 +106,11 @@ M=D
 @add
 0;jmp
 // create alias for return flow
-(add.ret.0.6113899924889925)
+(add.ret.0.3085748898469147)
 
 // function caller infinite
 // push return adress to stack
-@infinite.ret.0.06644330132072973
+@infinite.ret.0.2605670919047889
 d=a
 @sp
 a=m
@@ -152,7 +168,7 @@ M=D
 @infinite
 0;jmp
 // create alias for return flow
-(infinite.ret.0.06644330132072973)
+(infinite.ret.0.2605670919047889)
 
 // function crete infinite
 (infinite)

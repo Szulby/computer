@@ -26,57 +26,78 @@ fs.readFile("./vm.txt", "utf8", (err, data) => {
     .split("\n")
     .filter((el) => el && !el.includes("//"))
     .map((el) => el.trim())
+    .filter(Boolean)
     .forEach((line) => {
       const splitted = line.split(" ");
       if (splitted[0] === "stop") {
         output += stop();
+        return;
       }
       if (splitted[0] === "push") {
         if (splitted[1] === "constant") {
           output += pushConstant(splitted[2]);
+          return;
         }
         if (Object.keys(registerTypesEnum).find((el) => el === splitted[1])) {
           output += pushToStack(splitted[1], splitted[2]);
+          return;
         }
+        return (output += pushVariableToStack(splitted[1]));
       }
       if (splitted[0] === "pop") {
         if (splitted[1] === "local") {
           output += pop("@lcl", splitted[2]);
+          return;
         }
         if (splitted[1] === "argument") {
           output += pop("@arg", splitted[2]);
+          return;
         }
+        output += popVariable(splitted[1]);
+        return;
       }
       if (splitted[0] === "add") {
         output += add();
+        return;
       }
       if (splitted[0] === "sub") {
         output += sub();
+        return;
       }
       if (splitted[0] === "eq") {
         output += eq();
+        return;
       }
       if (splitted[0] === "label") {
         output += label(splitted[1]);
+        return;
       }
       if (splitted[0] === "goto") {
         output += goto(splitted[1]);
+        return;
       }
       if (splitted[0] === "if-goto") {
         output += ifGoto(splitted[1]);
+        return;
       }
       if (splitted[0] === "function") {
         output += functionCreator(splitted[1]);
+        return;
       }
       if (splitted[0] === "call") {
         output += functionCaller(splitted[1], splitted[2]);
+        return;
       }
       if (splitted[0] === "return") {
         output += returnFunction();
+        return;
       }
+      throw new Error(line);
     });
+
   fs.writeFile("asm.txt", output.trim(), (err) => {
     if (err) console.log(err);
+    else console.log("written correctly");
   });
 });
 
@@ -100,15 +121,7 @@ ${pushD()}
 
   return out;
 }
-function pushD() {
-  return `
-@sp
-a=m
-m=d
-@sp
-m=m+1  
-`.trim();
-}
+
 function pushConstant(constant) {
   const push = `
 // push constant ${constant}
@@ -118,6 +131,26 @@ ${pushD()}
 `;
   return push;
 }
+
+function pushVariableToStack(name) {
+  return `
+// push variable ${name} to stack
+@${name}
+d=m
+${pushD()}  
+`;
+}
+
+function pushD() {
+  return `
+@sp
+a=m
+m=d
+@sp
+m=m+1  
+`.trim();
+}
+
 function pop(type, offset) {
   const out = `
 // pop ${type} offset ${offset}
@@ -342,4 +375,15 @@ a=m
 0;JMP
 `;
   return out;
+}
+
+function popVariable(name) {
+  return `
+// pop to ${name}
+@sp
+am=m-1
+d=m
+@${name}
+m=d
+`;
 }
