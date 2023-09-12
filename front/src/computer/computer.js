@@ -93,7 +93,7 @@ function computer() {
 
   console.log(actualPc, preparedData[actualPc]);
 
-  if (romEl.join("") === "1111111111111111") {
+  if (!romEl) {
     infinity = false;
     return;
   }
