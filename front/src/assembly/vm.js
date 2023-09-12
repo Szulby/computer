@@ -34,7 +34,7 @@ fs.readFile("./vm.txt", "utf8", (err, data) => {
         return;
       }
       if (splitted[0] === "push") {
-        if (splitted[1] === "constant") {
+        if (splitted[1] === "constant" || splitted[1] === "const") {
           output += pushConstant(splitted[2]);
           return;
         }
@@ -66,6 +66,10 @@ fs.readFile("./vm.txt", "utf8", (err, data) => {
       }
       if (splitted[0] === "eq") {
         output += eq();
+        return;
+      }
+      if (splitted[0] === "gt") {
+        output += gt();
         return;
       }
       if (splitted[0] === "label") {
@@ -224,7 +228,33 @@ m=m+1
 `;
   return out;
 }
-
+function gt() {
+  const random = Math.random();
+  const out = `
+// gt
+@SP
+AM=M-1
+D=M
+@sp
+AM=M-1
+D=m-d
+// push true
+@sp
+a=m
+m=-1
+@sp
+m=m+1
+// jump out of memory if true
+@end.${random}
+d;jgt
+// push false
+@sp
+a=m-1
+m=0
+(end.${random})
+`;
+  return out;
+}
 function label(symbol) {
   const out = `
 // label ${symbol}
