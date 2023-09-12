@@ -45,7 +45,7 @@ fs.readFile("./asm.txt", "utf8", (er, data) => {
   createAlias(input).forEach((line) => {
     parse(line);
   });
-  console.log(symbols, Object.keys(symbols).length);
+  console.log(symbols, `symbol length: ${Object.keys(symbols).length}`);
   if (Object.keys(symbols).length > 250) {
     throw `to many symbols ${Object.keys(symbols).length}`;
   }
@@ -96,12 +96,15 @@ function parse(line) {
     if (c[1].toLowerCase() === "m") base += "1110000";
     if (c[1].toLowerCase() === "d+1") base += "0011111";
     if (c[1].toLowerCase() === "m+1") base += "1110111";
+    if (c[1].toLowerCase() === "d-1") base += "0001110";
     if (c[1].toLowerCase() === "m-1") base += "1110010";
     if (c[1].toLowerCase() === "d+a") base += "0000010";
     if (c[1].toLowerCase() === "d+m") base += "1000010";
     if (c[1].toLowerCase() === "d-a") base += "0010011";
     if (c[1].toLowerCase() === "a-1") base += "0110010";
     if (c[1].toLowerCase() === "d-m") base += "1010011";
+    if (c[1].toLowerCase() === "a-d") base += "0000111";
+    if (c[1].toLowerCase() === "m-d") base += "1000111";
     // destination instructions
     if (!c[0]) base += "000";
     if (c[0].toLowerCase() === "am") base += "101";
