@@ -2,9 +2,29 @@ import fs from "fs";
 const mult = `
 function mult 2
   push argument 0
+  pop x
   push argument 1
-  
-  stop
+  pop y
+  push const 0
+  pop sum
+  push const 1
+  pop n 
+  label WHILE_LOOP
+  push n
+  push y
+  gt
+  if-goto END_LOOP
+  push sum
+  push x
+  add
+  pop sum
+  push n
+  push const 1
+  add
+  pop n
+  goto WHILE_LOOP
+  label END_LOOP
+  push sum
   return
 `;
 const infinite = `
@@ -31,9 +51,9 @@ import infinite
 import add
 import mult
 
-let a = 123
-add(3,42)
-
+//let a = 123
+//add(3,42)
+mult(23,3)
 infinite()
 
 
