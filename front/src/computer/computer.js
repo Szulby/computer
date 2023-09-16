@@ -45,38 +45,38 @@ self.onmessage = ({ data }) => {
   if (data.type === "reset") {
     pc(Array(16).fill(0), 1, 1);
   }
-  if (data.type === "ramFront") {
-    console.log(
-      "ramFront",
-      ram()
-        .slice(0, 40)
-        .map((el) => parseRamValue(el))
-    );
-  }
-  if (data.type === "stack") {
-    console.log(
-      "stack",
-      ram()
-        .slice(256, 290)
-        .map((el) => parseRamValue(el))
-    );
-  }
-  if (data.type === "local") {
-    console.log(
-      "local",
-      ram()
-        .slice(300, 310)
-        .map((el) => parseRamValue(el))
-    );
-  }
-  if (data.type === "argument") {
-    console.log(
-      "argument",
-      ram()
-        .slice(400, 410)
-        .map((el) => parseRamValue(el))
-    );
-  }
+  // if (data.type === "ramFront") {
+  //   console.log(
+  //     "ramFront",
+  //     ram()
+  //       .slice(0, 40)
+  //       .map((el) => parseRamValue(el))
+  //   );
+  // }
+  // if (data.type === "stack") {
+  //   console.log(
+  //     "stack",
+  //     ram()
+  //       .slice(256, 290)
+  //       .map((el) => parseRamValue(el))
+  //   );
+  // }
+  // if (data.type === "local") {
+  //   console.log(
+  //     "local",
+  //     ram()
+  //       .slice(300, 310)
+  //       .map((el) => parseRamValue(el))
+  //   );
+  // }
+  // if (data.type === "argument") {
+  //   console.log(
+  //     "argument",
+  //     ram()
+  //       .slice(400, 410)
+  //       .map((el) => parseRamValue(el))
+  //   );
+  // }
 };
 setInterval(() => {
   if (nextStep || infinity) {
@@ -91,7 +91,7 @@ function computer() {
 
   const romEl = rom()[actualPc];
 
-  console.log(actualPc, preparedData[actualPc]);
+  // console.log(actualPc, preparedData[actualPc]);
 
   if (!romEl) {
     infinity = false;
