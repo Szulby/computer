@@ -3,12 +3,11 @@ export default function screen(props) {
   const canvasRef = useRef();
   useEffect(() => {
     const canvas = canvasRef.current;
-
     const context = canvas.getContext("2d");
-    context.fillStyle = "#000000";
     props.screen
       .flatMap((el) => el)
       .forEach((pixel, key) => {
+        context.fillStyle = `#${pixel ? "fff" : "000"}`;
         context.fillRect(key % 256, Math.floor(key / 256), 1, 1);
       });
   }, [props.screen]);

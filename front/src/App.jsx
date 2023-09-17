@@ -30,6 +30,9 @@ function App() {
       <h1>Compik</h1>
       <button onClick={click}>Click</button>
       <button onClick={reset}>Reset</button>
+      {/* {screen.map((romEl, id) => (
+        <p key={id}>{romEl}</p>
+      ))} */}
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Screen screen={screen} />
       </div>
