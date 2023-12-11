@@ -1,28 +1,6 @@
-
-push constant 123
-pop a
-  
-push constant 3
-push constant 42
-call add 2
-call infinite 0
-
-function infinite 0
-  label end
-  goto end
-return
-
-
-function add 2
-  push argument 0
-  push argument 1
-  add
-return
-
-
-function mult 2
-  push argument 0
-  push argument 1
-  
-  stop
-  return
+push constant 1
+push constant 0
+sub
+pop white
+push const screen 
+pop screenval

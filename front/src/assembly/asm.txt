@@ -12,425 +12,56 @@ d=a
 @arg
 m=d
 
-// push constant 123
-@123
-D=A
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-// pop to a
-@sp
-am=m-1
-d=m
-@a
-m=d
-
-// push constant 3
-@3
-D=A
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-// push constant 42
-@42
-D=A
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-// function caller add
-// push return adress to stack
-@add.ret.0.3085748898469147
-d=a
-@sp
-a=m
-m=d
-@sp
-m=m+1
-// push local, arg, this, that offset to stack
-@LCL
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-@ARG
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-@THIS
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-@THAT
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-// set new arg
-@SP
-D=M
-@7
-D=D-A
-@ARG
-M=D
-
-// Ustawienie LCL na pozycję SP
-@SP
-D=M
-@LCL
-M=D
-
-// jump to function
-@add
-0;jmp
-// create alias for return flow
-(add.ret.0.3085748898469147)
-
-// function caller infinite
-// push return adress to stack
-@infinite.ret.0.2605670919047889
-d=a
-@sp
-a=m
-m=d
-@sp
-m=m+1
-// push local, arg, this, that offset to stack
-@LCL
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-@ARG
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-@THIS
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-@THAT
-D=M
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-// set new arg
-@SP
-D=M
-@5
-D=D-A
-@ARG
-M=D
-
-// Ustawienie LCL na pozycję SP
-@SP
-D=M
-@LCL
-M=D
-
-// jump to function
-@infinite
-0;jmp
-// create alias for return flow
-(infinite.ret.0.2605670919047889)
-
-// function crete infinite
-(infinite)
-
-
-// label end
-(end)  
-
-// go-to
-@end
-0;jmp  
-
-// function return
-
-// // Przywrócenie wartości wyniku do segmentu lokalnego 0
-// @SP
-// A=M-1
-// D=M
-// @LCL
-// A=M 
-// M=D
-
-// local to r13
-@LCL
-D=M
-@R13
-M=D
-
-// save return stack addres to r14
-@lcl
-d=m
-@5
-d=d-a
-@r14
-m=d
-
-// set local 0 to arg 0
-@SP
-A=M-1
-D=M
-@ARG
-A=M
-M=D
-
-// 4. SP = ARG + 1
-@ARG
-D=M+1
-@SP
-M=D
-
-// 7. ARG 
-@R13
-D=M
-@3
-A=D-A
-D=M
-@ARG
-M=D
-
-// 8. LCL
-@R13
-D=M
-@4
-A=D-A
-D=M
-@LCL
-M=D
-//  goto RET
-@R14
-A=M
-a=m
-0;JMP
-
-// function crete add
-(add)
-
-
-// push argument 0
-@arg
-d=m
-@0
-a=d+a
-d=m
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-// push argument 1
-@arg
-d=m
+// push constant 1
 @1
-a=d+a
-d=m
+D=A
 @sp
 a=m
 m=d
 @sp
 m=m+1
 
-// add
-@SP
-am=m-1
-d=m
-@sp
-am=m-1
-d=d+m
-@sp
-a=m
-m=d
-@sp
-m=m+1
-
-// function return
-
-// // Przywrócenie wartości wyniku do segmentu lokalnego 0
-// @SP
-// A=M-1
-// D=M
-// @LCL
-// A=M 
-// M=D
-
-// local to r13
-@LCL
-D=M
-@R13
-M=D
-
-// save return stack addres to r14
-@lcl
-d=m
-@5
-d=d-a
-@r14
-m=d
-
-// set local 0 to arg 0
-@SP
-A=M-1
-D=M
-@ARG
-A=M
-M=D
-
-// 4. SP = ARG + 1
-@ARG
-D=M+1
-@SP
-M=D
-
-// 7. ARG 
-@R13
-D=M
-@3
-A=D-A
-D=M
-@ARG
-M=D
-
-// 8. LCL
-@R13
-D=M
-@4
-A=D-A
-D=M
-@LCL
-M=D
-//  goto RET
-@R14
-A=M
-a=m
-0;JMP
-
-// function crete mult
-(mult)
-
-
-// push argument 0
-@arg
-d=m
+// push constant 0
 @0
-a=d+a
-d=m
+D=A
 @sp
 a=m
 m=d
 @sp
 m=m+1
 
-// push argument 1
-@arg
+// sub
+@sp
+am=m-1
 d=m
-@1
-a=d+a
-d=m
+@sp
+am=m-1
+d=d-m
 @sp
 a=m
 m=d
 @sp
 m=m+1
 
-stop
-
-// function return
-
-// // Przywrócenie wartości wyniku do segmentu lokalnego 0
-// @SP
-// A=M-1
-// D=M
-// @LCL
-// A=M 
-// M=D
-
-// local to r13
-@LCL
-D=M
-@R13
-M=D
-
-// save return stack addres to r14
-@lcl
+// pop to white
+@sp
+am=m-1
 d=m
-@5
-d=d-a
-@r14
+@white
 m=d
 
-// set local 0 to arg 0
-@SP
-A=M-1
-D=M
-@ARG
-A=M
-M=D
-
-// 4. SP = ARG + 1
-@ARG
-D=M+1
-@SP
-M=D
-
-// 7. ARG 
-@R13
-D=M
-@3
-A=D-A
-D=M
-@ARG
-M=D
-
-// 8. LCL
-@R13
-D=M
-@4
-A=D-A
-D=M
-@LCL
-M=D
-//  goto RET
-@R14
-A=M
+// push constant screen
+@screen
+D=A
+@sp
 a=m
-0;JMP
+m=d
+@sp
+m=m+1
+
+// pop to screenval
+@sp
+am=m-1
+d=m
+@screenval
+m=d

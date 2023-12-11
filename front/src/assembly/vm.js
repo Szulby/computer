@@ -205,7 +205,7 @@ d=d-m
 a=m
 m=d
 @sp
-m= m+1
+m=m+1
 `;
   return out;
 }

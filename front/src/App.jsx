@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Screen from "./screen";
+
 const worker = new Worker(new URL("./computer/computer", import.meta.url), {
   type: "module",
 });
+
 function App() {
   const [screen, setScreen] = useState([]);
 
