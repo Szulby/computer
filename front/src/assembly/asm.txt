@@ -59,9 +59,25 @@ m=d
 @sp
 m=m+1
 
-// pop to screenval
-@sp
-am=m-1
+
+
+@white
 d=m
-@screenval
+@sp
+a=m
+am=a-1
+a=m
 m=d
+
+
+// drow to next pixel
+(while)
+
+@sp
+a=m
+a=m
+am=m+1
+m=d
+
+@while
+0;jmp

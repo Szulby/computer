@@ -97,6 +97,9 @@ function computer() {
   const romEl = rom()[actualPc];
 
   // console.log(actualPc, preparedData[actualPc]);
+  if (!infinity) {
+    console.log(actualPc, preparedData[actualPc]);
+  }
 
   if (!romEl) {
     infinity = false;
