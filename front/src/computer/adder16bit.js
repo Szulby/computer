@@ -1,7 +1,8 @@
-import fullAdder from './fullAdder.js'
-import halfAdder from './halfAdder.js'
+import fullAdder from "./fullAdder.js";
+import halfAdder from "./halfAdder.js";
 
 export default function adder16bit(a, b) {
+
 	let c
 	let o = []
 	for (let i = 15; i >= 0; i--) {
