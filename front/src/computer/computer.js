@@ -42,7 +42,7 @@ self.onmessage = ({ data }) => {
     nextStep = true;
   }
   if (data.type === "screen") {
-    self.postMessage(ram().slice(16384, 16384 + 8192));
+    self.postMessage(readRam(16384, 8192));
   }
   if (data.type === "reset") {
     pc(Array(16).fill(0), 1, 1);
@@ -51,36 +51,16 @@ self.onmessage = ({ data }) => {
   if (!logging) return;
 
   if (data.type === "ramFront") {
-    console.log(
-      "ramFront",
-      ram()
-        .slice(0, 40)
-        .map((el) => parseRamValue(el))
-    );
+    console.log("ramFront", readRam(0, 40).map(parseRamValue));
   }
   if (data.type === "stack") {
-    console.log(
-      "stack",
-      ram()
-        .slice(256, 290)
-        .map((el) => parseRamValue(el))
-    );
+    console.log("stack", readRam(256, 34).map(parseRamValue));
   }
   if (data.type === "local") {
-    console.log(
-      "local",
-      ram()
-        .slice(300, 310)
-        .map((el) => parseRamValue(el))
-    );
+    console.log("local", readRam(300, 10).map(parseRamValue));
   }
   if (data.type === "argument") {
-    console.log(
-      "argument",
-      ram()
-        .slice(400, 410)
-        .map((el) => parseRamValue(el))
-    );
+    console.log("argument", readRam(400, 10).map(parseRamValue));
   }
 };
 setInterval(() => {
@@ -94,7 +74,12 @@ function computer() {
   const actualPc = parseRamValue(pc());
   // await new Promise((resolve) => setTimeout(resolve, 1));
 
-  const romEl = rom()[actualPc];
+  // out of range must give undefined because the halt check below relies on it
+  // actualPc can be negative when an alu result lands in register a
+  const romEl =
+    actualPc >= 0 && actualPc < preparedData.length
+      ? rom([], actualPc, 0)
+      : undefined;
 
   // console.log(actualPc, preparedData[actualPc]);
   if (!infinity) {
@@ -109,13 +94,14 @@ function computer() {
   if (!romEl[0]) {
     a(romEl, 1);
   } else {
+    const addr = parseInt(a().join(""), 2);
     const aluResponse = alu(
       d(),
-      mux16(a(), ram()[parseInt(a().join(""), 2)], romEl[3]),
+      mux16(a(), ram([], addr, 0), romEl[3]),
       [romEl[4], romEl[5], romEl[6], romEl[7], romEl[8], romEl[9]]
     );
     // store to ram
-    ram(aluResponse.out, parseInt(a().join(""), 2), romEl[12]);
+    ram(aluResponse.out, addr, romEl[12]);
 
     // then store to registers
     a(aluResponse.out, romEl[10]);
@@ -128,4 +114,14 @@ function computer() {
 
 function parseRamValue(input) {
   return parseInt(input.join(""), 2) - (input[0] ? Math.pow(2, 16) : 0);
+}
+
+// read a range of ram word by word
+// ram() without an address dumps all 64k registers, so never use it to read
+function readRam(start, length) {
+  const out = [];
+  for (let i = 0; i < length; i++) {
+    out.push(ram([], start + i, 0));
+  }
+  return out;
 }
