@@ -1,7 +1,5 @@
-import api from "./wasm.js";
+import nand from "./nand.js";
 
-export default api.and;
-
-// export default function and(a, b) {
-//   return api.nand(api.nand(a, b), api.nand(a, b));
-// }
+export default function and(a, b) {
+  return nand(nand(a, b), nand(a, b));
+}

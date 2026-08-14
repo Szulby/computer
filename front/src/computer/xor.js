@@ -1,18 +1,16 @@
 import nand from './nand.js'
-import api from './wasm.js'
 
-// export default api.xor
- function xor(a, b) {
+function xor(a, b) {
 	return nand(
         nand(
-            a, 
+            a,
             nand(a, b)
             ),
         nand(
-            b, 
+            b,
             nand(a, b)
             )
         )
 }
 
-export default api.xor
+export default xor
