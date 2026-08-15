@@ -33,20 +33,35 @@ const pc = programCounter();
 const a = sixteenBitRegister();
 const d = sixteenBitRegister();
 
-let infinity = true;
-let nextStep = false;
+let running = false; // free run, off until the ui asks for it
+let halted = false; // program walked off the end of the rom
+let stepsPending = 0; // single steps ordered from the ui
 let logging = true;
 
 self.onmessage = ({ data }) => {
-  if (data.type === "click" || infinity) {
-    nextStep = true;
+  if (data.type === "click") {
+    // stop the free run and advance by exactly one instruction
+    running = false;
+    stepsPending++;
   }
-  if (data.type === "screen") {
-    self.postMessage(readRam(16384, 8192));
+  if (data.type === "run") {
+    running = !running;
+    stepsPending = 0;
   }
   if (data.type === "reset") {
     pc(Array(16).fill(0), 1, 1);
+    clearScreen();
+    halted = false;
+    stepsPending = 0;
+    // push the blank screen right away, waiting for the next poll would look stuck
+    self.postMessage({ type: "screen", screen: readRam(16384, 8192) });
   }
+  if (data.type === "screen") {
+    self.postMessage({ type: "screen", screen: readRam(16384, 8192) });
+  }
+
+  // every message can change the state, and the ui asks for it on mount anyway
+  postState();
 
   if (!logging) return;
 
@@ -64,10 +79,15 @@ self.onmessage = ({ data }) => {
   }
 };
 setInterval(() => {
-  if (nextStep || infinity) {
+  if (halted) return;
+  if (stepsPending > 0) {
     computer();
-    nextStep = false;
+    stepsPending--;
+  } else if (running) {
+    computer();
   }
+  // the program can end in the middle of a tick, tell the ui once it happens
+  if (halted) postState();
 }, 0);
 
 function computer() {
@@ -81,13 +101,13 @@ function computer() {
       ? rom([], actualPc, 0)
       : undefined;
 
-  // console.log(actualPc, preparedData[actualPc]);
-  if (!infinity) {
+  // trace every instruction while stepping, it would flood the console on a free run
+  if (logging && !running) {
     console.log(actualPc, preparedData[actualPc]);
   }
 
   if (!romEl) {
-    infinity = false;
+    halted = true;
     return;
   }
 
@@ -110,6 +130,19 @@ function computer() {
     // jump
     jmp(romEl, aluResponse, pc, a);
   }
+}
+
+// blank the screen area of the ram. the rest of the ram is left alone, the
+// program rebuilds its own variables when it runs again from the start
+function clearScreen() {
+  const zero = Array(16).fill(0);
+  for (let i = 0; i < 8192; i++) {
+    ram(zero, 16384 + i, 1);
+  }
+}
+
+function postState() {
+  self.postMessage({ type: "state", running, halted, stepsPending });
 }
 
 function parseRamValue(input) {
