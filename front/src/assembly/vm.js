@@ -21,7 +21,14 @@ const registerTypesEnum = {
   argument: "@arg",
 };
 
-fs.readFile("./vm.txt", "utf8", (err, data) => {
+// vm.txt is what bjs.js generates, pass a path to translate something else
+const source = process.argv[2] || "./vm.txt";
+
+fs.readFile(source, "utf8", (err, data) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
   data
     .split("\n")
     .filter((el) => el && !el.includes("//"))

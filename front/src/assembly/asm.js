@@ -29,7 +29,10 @@ const symbols = {
 let symbolOffset = 16;
 const parsed = [];
 
-fs.readFile("./asm.txt", "utf8", (er, data) => {
+// asm.txt is what vm.js generates, pass a path to assemble something else
+const source = process.argv[2] || "./asm.txt";
+
+fs.readFile(source, "utf8", (er, data) => {
   if (er) {
     console.log(er);
     return;
