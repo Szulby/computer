@@ -33,10 +33,31 @@ const pc = programCounter();
 const a = sixteenBitRegister();
 const d = sixteenBitRegister();
 
+// how long we compute before handing control back, and how often we look at
+// the clock while doing it. checking every instruction would cost about a percent
+const BURST_MS = 12;
+const CHUNK = 256;
+// a tight MessageChannel loop can starve other task sources, so every so often
+// we go around through a timer instead. costs well under a percent of throughput
+const TIMER_YIELD_MS = 200;
+
 let running = false; // free run, off until the ui asks for it
 let halted = false; // program walked off the end of the rom
 let stepsPending = 0; // single steps ordered from the ui
+let scheduled = false; // a burst is already queued
+let lastTimerYield = 0; // when we last went around through a timer
 let logging = true;
+
+// setTimeout is clamped to a millisecond, which would cap us at roughly a
+// thousand instructions a second. a MessageChannel task carries no such clamp
+const clock = new MessageChannel();
+clock.port1.onmessage = onBurstDue;
+
+function onBurstDue() {
+  scheduled = false;
+  runBurst();
+  wake();
+}
 
 self.onmessage = ({ data }) => {
   if (data.type === "click") {
@@ -62,6 +83,7 @@ self.onmessage = ({ data }) => {
 
   // every message can change the state, and the ui asks for it on mount anyway
   postState();
+  wake();
 
   if (!logging) return;
 
@@ -78,17 +100,39 @@ self.onmessage = ({ data }) => {
     console.log("argument", readRam(400, 10).map(parseRamValue));
   }
 };
-setInterval(() => {
-  if (halted) return;
-  if (stepsPending > 0) {
-    computer();
-    stepsPending--;
-  } else if (running) {
-    computer();
+// queue a burst unless one is already queued, or there is nothing to do. going
+// idle matters: rescheduling unconditionally would spin a core at full tilt
+function wake() {
+  if (scheduled) return;
+  if (halted || (!running && stepsPending === 0)) return;
+  scheduled = true;
+  const now = performance.now();
+  if (now - lastTimerYield >= TIMER_YIELD_MS) {
+    lastTimerYield = now;
+    setTimeout(onBurstDue, 0);
+  } else {
+    clock.port2.postMessage(0);
   }
-  // the program can end in the middle of a tick, tell the ui once it happens
-  if (halted) postState();
-}, 0);
+}
+
+function runBurst() {
+  const wasHalted = halted;
+
+  if (stepsPending > 0) {
+    while (stepsPending > 0 && !halted) {
+      computer();
+      stepsPending--;
+    }
+  } else if (running) {
+    const deadline = performance.now() + BURST_MS;
+    do {
+      for (let i = 0; i < CHUNK && !halted; i++) computer();
+    } while (!halted && performance.now() < deadline);
+  }
+
+  // the program can end mid burst, tell the ui once it happens
+  if (halted && !wasHalted) postState();
+}
 
 function computer() {
   const actualPc = parseRamValue(pc());
